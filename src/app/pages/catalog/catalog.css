@@ -1,0 +1,225 @@
+.catalog {
+  /* Lascia spazio alla navbar fissa. */
+  padding: calc(var(--nf-header-h) + 34px) var(--nf-gutter) 80px;
+}
+
+.catalog__title {
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.catalog__sub {
+  margin-top: 6px;
+  color: var(--nf-text-muted);
+  font-size: 0.95rem;
+}
+
+/* --------------------------------------------------------------------------
+   Filtri
+   -------------------------------------------------------------------------- */
+
+.filters {
+  margin: 26px 0 30px;
+  padding: 18px;
+  border: 1px solid var(--nf-border);
+  border-radius: var(--nf-radius-lg);
+  background: var(--nf-surface);
+}
+
+.filters__search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border: 1px solid var(--nf-border);
+  border-radius: var(--nf-radius);
+  background: var(--nf-bg);
+  color: var(--nf-text-dim);
+}
+
+.filters__search:focus-within {
+  border-color: var(--nf-text-muted);
+  color: var(--nf-text);
+}
+
+.filters__search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  color: var(--nf-text);
+  font-size: 0.98rem;
+  outline: none;
+}
+
+.filters__search input::-webkit-search-cancel-button {
+  filter: invert(1);
+  opacity: 0.5;
+}
+
+.filters__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--nf-text-dim);
+}
+
+.field__value {
+  color: var(--nf-red);
+  font-size: 0.85rem;
+}
+
+.field select {
+  padding: 9px 10px;
+  border: 1px solid var(--nf-border);
+  border-radius: var(--nf-radius);
+  background: var(--nf-bg);
+  color: var(--nf-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.field select:hover {
+  border-color: var(--nf-text-dim);
+}
+
+/* Gli <option> ereditano il tema di sistema su Windows: forzandone i colori
+   restano leggibili anche nel menu a tendina nativo. */
+.field select option {
+  background: var(--nf-surface);
+  color: var(--nf-text);
+}
+
+.field--range input[type='range'] {
+  width: 100%;
+  accent-color: var(--nf-red);
+  cursor: pointer;
+}
+
+.filters__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--nf-border);
+}
+
+.filters__count {
+  font-size: 0.86rem;
+  color: var(--nf-text-muted);
+  /* Riserva l'altezza della riga anche mentre il conteggio è nascosto. */
+  min-height: 1.2em;
+}
+
+.filters__reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid var(--nf-border);
+  border-radius: var(--nf-radius);
+  background: none;
+  color: var(--nf-text-muted);
+  font-size: 0.84rem;
+  transition:
+    color var(--nf-dur) var(--nf-ease),
+    border-color var(--nf-dur) var(--nf-ease);
+}
+
+.filters__reset:hover {
+  color: var(--nf-text);
+  border-color: var(--nf-text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Griglia risultati
+   -------------------------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  gap: 16px;
+  /* Le schede riempiono la cella invece di tenere la larghezza del carosello. */
+  --nf-card-w: 100%;
+}
+
+.grid__skeleton {
+  aspect-ratio: 2 / 3;
+}
+
+.catalog__error,
+.catalog__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 70px 20px;
+  text-align: center;
+  color: var(--nf-text-dim);
+}
+
+.catalog__error {
+  flex-direction: row;
+  justify-content: center;
+  color: #ff6b6b;
+}
+
+.catalog__more {
+  display: flex;
+  justify-content: center;
+  margin-top: 34px;
+}
+
+.catalog__more-btn {
+  padding: 12px 34px;
+  border: 1px solid var(--nf-border);
+  border-radius: var(--nf-radius);
+  background: var(--nf-surface);
+  color: var(--nf-text);
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition: background var(--nf-dur) var(--nf-ease);
+}
+
+.catalog__more-btn:hover:not(:disabled) {
+  background: var(--nf-red);
+  border-color: var(--nf-red);
+}
+
+.catalog__more-btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+    gap: 12px;
+  }
+
+  .filters {
+    padding: 14px;
+  }
+}

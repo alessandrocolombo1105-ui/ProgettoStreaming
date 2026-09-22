@@ -1,0 +1,122 @@
+<section class="catalog">
+  <header class="catalog__head">
+    <h1 class="catalog__title">Catalogo</h1>
+    <p class="catalog__sub">Cerca fra migliaia di film e serie TV, poi affina con i filtri.</p>
+  </header>
+
+  <form class="filters" [formGroup]="form" (submit)="$event.preventDefault()">
+    <div class="filters__search">
+      <app-icon name="search" [size]="18" />
+      <input
+        type="search"
+        formControlName="query"
+        placeholder="Cerca per titolo…"
+        aria-label="Cerca per titolo"
+        autocomplete="off"
+      />
+    </div>
+
+    <div class="filters__grid">
+      <label class="field">
+        <span class="field__label">Tipo</span>
+        <select formControlName="mediaType">
+          <option value="movie">Film</option>
+          <option value="tv">Serie TV</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Genere</span>
+        <select formControlName="genreId">
+          <option [ngValue]="null">Tutti i generi</option>
+          @for (genre of genres(); track genre.id) {
+            <option [ngValue]="genre.id">{{ genre.name }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Anno</span>
+        <select formControlName="year">
+          <option [ngValue]="null">Tutti gli anni</option>
+          @for (year of years; track year) {
+            <option [ngValue]="year">{{ year }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Ordina per</span>
+        <select formControlName="sortBy">
+          @for (choice of sortChoices; track choice.value) {
+            <option [value]="choice.value">{{ choice.label }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field field--range">
+        <span class="field__label">
+          Voto minimo
+          <strong class="field__value">{{ form.controls.minRating.value }}</strong>
+        </span>
+        <input
+          type="range"
+          formControlName="minRating"
+          min="0"
+          max="9"
+          step="1"
+          aria-label="Voto minimo"
+        />
+      </label>
+    </div>
+
+    <div class="filters__foot">
+      <p class="filters__count" aria-live="polite">
+        @if (!loading()) {
+          {{ resultsLabel() }}
+        }
+      </p>
+
+      @if (hasActiveFilters()) {
+        <button type="button" class="filters__reset" (click)="resetFilters()">
+          <app-icon name="close" [size]="15" />
+          Azzera filtri
+        </button>
+      }
+    </div>
+  </form>
+
+  <!-- Risultati -->
+  @if (error(); as message) {
+    <p class="catalog__error">
+      <app-icon name="alert" [size]="18" />
+      {{ message }}
+    </p>
+  } @else if (loading()) {
+    <div class="grid">
+      @for (item of skeletons; track item) {
+        <div class="nf-skeleton grid__skeleton"></div>
+      }
+    </div>
+  } @else if (!hasResults()) {
+    <div class="catalog__empty">
+      <app-icon name="filter" [size]="34" />
+      <p>Nessun titolo corrisponde ai filtri selezionati.</p>
+      <button type="button" class="filters__reset" (click)="resetFilters()">Azzera i filtri</button>
+    </div>
+  } @else {
+    <div class="grid">
+      @for (item of results(); track trackMedia(item)) {
+        <app-movie-card [media]="item" [posterLayout]="true" />
+      }
+    </div>
+
+    @if (canLoadMore()) {
+      <div class="catalog__more">
+        <button type="button" class="catalog__more-btn" [disabled]="loadingMore()" (click)="loadMore()">
+          {{ loadingMore() ? 'Caricamento…' : 'Carica altri titoli' }}
+        </button>
+      </div>
+    }
+  }
+</section>

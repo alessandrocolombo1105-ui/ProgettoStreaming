@@ -1,0 +1,68 @@
+<app-hero-banner [media]="featured()" [loading]="heroLoading()" />
+
+<div class="nf-rows">
+  <app-movie-row
+    title="In tendenza oggi"
+    [items]="trending().data"
+    [loading]="trending().loading"
+    [error]="trending().error"
+  />
+
+  <app-movie-row
+    title="I più popolari"
+    [items]="popularMovies().data"
+    [loading]="popularMovies().loading"
+    [error]="popularMovies().error"
+  />
+
+  <app-movie-row
+    title="Serie TV consigliate"
+    [items]="popularTv().data"
+    [loading]="popularTv().loading"
+    [error]="popularTv().error"
+  />
+
+  <app-movie-row
+    title="Film d'azione"
+    [items]="action().data"
+    [loading]="action().loading"
+    [error]="action().error"
+  />
+
+  <app-movie-row
+    title="Prossimamente al cinema"
+    [items]="upcoming().data"
+    [loading]="upcoming().loading"
+    [error]="upcoming().error"
+    [posterLayout]="true"
+  />
+
+  <app-movie-row
+    title="I più votati di sempre"
+    [items]="topRatedMovies().data"
+    [loading]="topRatedMovies().loading"
+    [error]="topRatedMovies().error"
+    [posterLayout]="true"
+  />
+
+  <app-movie-row
+    title="Commedie"
+    [items]="comedy().data"
+    [loading]="comedy().loading"
+    [error]="comedy().error"
+  />
+
+  <app-movie-row
+    title="Serie TV più votate"
+    [items]="topRatedTv().data"
+    [loading]="topRatedTv().loading"
+    [error]="topRatedTv().error"
+  />
+
+  <app-movie-row
+    title="Horror da brivido"
+    [items]="horror().data"
+    [loading]="horror().loading"
+    [error]="horror().error"
+  />
+</div>

@@ -1,0 +1,182 @@
+.auth {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: calc(var(--nf-header-h) + 30px) 20px 60px;
+}
+
+/* Sfondo scuro con una vignettatura rossa appena accennata. */
+.auth__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(229, 9, 20, 0.18), transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(229, 9, 20, 0.1), transparent 40%),
+    var(--nf-bg);
+}
+
+.auth__card {
+  position: relative;
+  width: min(430px, 100%);
+  padding: 38px 40px 30px;
+  border: 1px solid var(--nf-border);
+  border-radius: var(--nf-radius-lg);
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--nf-shadow-modal);
+}
+
+.auth__title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+
+.auth__error {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 18px;
+  padding: 11px 13px;
+  border-radius: var(--nf-radius);
+  background: rgba(229, 9, 20, 0.16);
+  border: 1px solid rgba(229, 9, 20, 0.5);
+  font-size: 0.87rem;
+}
+
+.auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.auth__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth__label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--nf-text-dim);
+}
+
+.auth__field input {
+  padding: 12px 14px;
+  border: 1px solid var(--nf-border);
+  border-radius: var(--nf-radius);
+  background: var(--nf-surface);
+  color: var(--nf-text);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color var(--nf-dur) var(--nf-ease);
+}
+
+.auth__field input:focus {
+  border-color: var(--nf-text-muted);
+}
+
+.auth__field input[aria-invalid='true'] {
+  border-color: var(--nf-red);
+}
+
+.auth__hint {
+  font-size: 0.78rem;
+  color: #ff8a8a;
+}
+
+.auth__submit {
+  margin-top: 8px;
+  padding: 13px;
+  border: 0;
+  border-radius: var(--nf-radius);
+  background: var(--nf-red);
+  color: var(--nf-text);
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background var(--nf-dur) var(--nf-ease);
+}
+
+.auth__submit:hover:not(:disabled) {
+  background: var(--nf-red-hover);
+}
+
+.auth__submit:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+/* Separatore con la parola centrata fra due righe. */
+.auth__divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 22px 0 16px;
+  color: var(--nf-text-dim);
+  font-size: 0.8rem;
+}
+
+.auth__divider::before,
+.auth__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--nf-border);
+}
+
+.auth__google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--nf-border);
+  border-radius: var(--nf-radius);
+  background: var(--nf-text);
+  color: #1f1f1f;
+  font-size: 0.93rem;
+  font-weight: 600;
+  transition: background var(--nf-dur) var(--nf-ease);
+}
+
+.auth__google:hover:not(:disabled) {
+  background: #e6e6e6;
+}
+
+.auth__google:disabled {
+  opacity: 0.65;
+}
+
+.auth__switch {
+  margin-top: 22px;
+  font-size: 0.9rem;
+  color: var(--nf-text-muted);
+}
+
+.auth__switch button {
+  border: 0;
+  background: none;
+  color: var(--nf-text);
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.auth__note {
+  margin-top: 16px;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--nf-text-dim);
+}
+
+@media (max-width: 480px) {
+  .auth__card {
+    padding: 28px 22px 24px;
+  }
+}

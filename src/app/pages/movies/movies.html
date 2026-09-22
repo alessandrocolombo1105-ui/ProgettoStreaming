@@ -1,0 +1,66 @@
+<app-hero-banner [media]="featured()" [loading]="heroLoading()" />
+
+<div class="nf-rows">
+  <app-movie-row
+    title="Ora al cinema"
+    [items]="nowPlaying().data"
+    [loading]="nowPlaying().loading"
+    [error]="nowPlaying().error"
+  />
+  <app-movie-row
+    title="Film più popolari"
+    [items]="popular().data"
+    [loading]="popular().loading"
+    [error]="popular().error"
+  />
+  <app-movie-row
+    title="Azione"
+    [items]="action().data"
+    [loading]="action().loading"
+    [error]="action().error"
+  />
+  <app-movie-row
+    title="Avventura"
+    [items]="adventure().data"
+    [loading]="adventure().loading"
+    [error]="adventure().error"
+  />
+  <app-movie-row
+    title="Fantascienza"
+    [items]="sciFi().data"
+    [loading]="sciFi().loading"
+    [error]="sciFi().error"
+  />
+  <app-movie-row
+    title="Thriller"
+    [items]="thriller().data"
+    [loading]="thriller().loading"
+    [error]="thriller().error"
+  />
+  <app-movie-row
+    title="Animazione"
+    [items]="animation().data"
+    [loading]="animation().loading"
+    [error]="animation().error"
+  />
+  <app-movie-row
+    title="Romantici"
+    [items]="romance().data"
+    [loading]="romance().loading"
+    [error]="romance().error"
+  />
+  <app-movie-row
+    title="I più votati"
+    [items]="topRated().data"
+    [loading]="topRated().loading"
+    [error]="topRated().error"
+    [posterLayout]="true"
+  />
+  <app-movie-row
+    title="In arrivo"
+    [items]="upcoming().data"
+    [loading]="upcoming().loading"
+    [error]="upcoming().error"
+    [posterLayout]="true"
+  />
+</div>

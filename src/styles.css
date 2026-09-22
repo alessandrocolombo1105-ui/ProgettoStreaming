@@ -122,6 +122,27 @@ img {
   border: 0;
 }
 
+/*
+  Pila di caroselli sotto l'hero. Risale sul banner per continuarne la
+  sfumatura senza stacco netto, come nelle pagine di Netflix.
+*/
+.nf-rows {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+  margin-top: -9vh;
+  padding-bottom: 60px;
+}
+
+@media (max-width: 860px) {
+  .nf-rows {
+    gap: 24px;
+    margin-top: -5vh;
+  }
+}
+
 /* Placeholder animato mostrato durante il caricamento dei dati TMDB. */
 .nf-skeleton {
   background: linear-gradient(

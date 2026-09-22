@@ -1,0 +1,58 @@
+<section class="page">
+  <header class="page__head">
+    <h1 class="page__title">La Mia Lista</h1>
+    <p class="page__sub">
+      @if (isEmpty()) {
+        I titoli che salvi compaiono qui, pronti da riprendere.
+      } @else {
+        {{ count() }} {{ count() === 1 ? 'titolo salvato' : 'titoli salvati' }} ·
+        {{ user()?.displayName }}
+      }
+    </p>
+  </header>
+
+  @if (isEmpty()) {
+    <div class="empty">
+      <app-icon name="star" [size]="40" />
+      <p class="empty__text">La tua lista è ancora vuota.</p>
+      <p class="empty__hint">
+        Passa il mouse su una scheda e premi <strong>+</strong> per aggiungere un titolo.
+      </p>
+      <a class="empty__cta" routerLink="/">Sfoglia il catalogo</a>
+    </div>
+  } @else {
+    <ul class="grid">
+      @for (item of items(); track trackItem(item)) {
+        <li class="tile">
+          <button
+            type="button"
+            class="tile__open"
+            [attr.aria-label]="'Apri i dettagli di ' + item.title"
+            (click)="open(item)"
+          >
+            <img class="tile__poster" [src]="posterUrl(item)" [alt]="item.title" loading="lazy" />
+          </button>
+
+          <button
+            type="button"
+            class="tile__remove"
+            [attr.aria-label]="'Rimuovi ' + item.title + ' da La Mia Lista'"
+            (click)="remove(item)"
+          >
+            <app-icon name="trash" [size]="16" />
+          </button>
+
+          <div class="tile__info">
+            <p class="tile__title">{{ item.title }}</p>
+            <p class="tile__meta">
+              <span class="tile__badge">{{ typeLabel(item) }}</span>
+              @if (item.year) {
+                <span>{{ item.year }}</span>
+              }
+            </p>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</section>

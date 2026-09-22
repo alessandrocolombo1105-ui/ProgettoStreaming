@@ -1,0 +1,59 @@
+<app-hero-banner [media]="featured()" [loading]="heroLoading()" />
+
+<div class="nf-rows">
+  <app-movie-row
+    title="In onda ora"
+    [items]="onTheAir().data"
+    [loading]="onTheAir().loading"
+    [error]="onTheAir().error"
+  />
+  <app-movie-row
+    title="Serie più popolari"
+    [items]="popular().data"
+    [loading]="popular().loading"
+    [error]="popular().error"
+  />
+  <app-movie-row
+    title="Azione e avventura"
+    [items]="actionAdventure().data"
+    [loading]="actionAdventure().loading"
+    [error]="actionAdventure().error"
+  />
+  <app-movie-row
+    title="Drammatiche"
+    [items]="drama().data"
+    [loading]="drama().loading"
+    [error]="drama().error"
+  />
+  <app-movie-row
+    title="Crime"
+    [items]="crime().data"
+    [loading]="crime().loading"
+    [error]="crime().error"
+  />
+  <app-movie-row
+    title="Comiche"
+    [items]="comedy().data"
+    [loading]="comedy().loading"
+    [error]="comedy().error"
+  />
+  <app-movie-row
+    title="Animazione"
+    [items]="animation().data"
+    [loading]="animation().loading"
+    [error]="animation().error"
+  />
+  <app-movie-row
+    title="Documentari"
+    [items]="documentary().data"
+    [loading]="documentary().loading"
+    [error]="documentary().error"
+  />
+  <app-movie-row
+    title="Le più votate"
+    [items]="topRated().data"
+    [loading]="topRated().loading"
+    [error]="topRated().error"
+    [posterLayout]="true"
+  />
+</div>
