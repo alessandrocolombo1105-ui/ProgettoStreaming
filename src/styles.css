@@ -1,1 +1,156 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   Design system — tema scuro nativo in stile Netflix
+   ========================================================================== */
+
+:root {
+  /* Superfici */
+  --nf-bg: #141414;
+  --nf-surface: #181818;
+  --nf-surface-hover: #232323;
+  --nf-surface-raised: #2a2a2a;
+  --nf-border: rgba(255, 255, 255, 0.12);
+
+  /* Accento */
+  --nf-red: #e50914;
+  --nf-red-hover: #f6121d;
+
+  /* Testo */
+  --nf-text: #ffffff;
+  --nf-text-muted: #b3b3b3;
+  --nf-text-dim: #808080;
+  --nf-green: #46d369;
+
+  /* Layout */
+  --nf-header-h: 68px;
+  --nf-gutter: 4vw;
+  --nf-radius: 6px;
+  --nf-radius-lg: 10px;
+
+  /* Elevazione */
+  --nf-shadow-card: 0 12px 30px rgba(0, 0, 0, 0.65);
+  --nf-shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.8);
+
+  /* Motion */
+  --nf-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --nf-dur: 280ms;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--nf-bg);
+  color: var(--nf-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Blocca lo scroll del documento mentre la modale dettagli è aperta. */
+body.nf-modal-open {
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Focus ring coerente su tutta l'app, visibile solo da tastiera. */
+:focus-visible {
+  outline: 2px solid var(--nf-text);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Utility condivise
+   -------------------------------------------------------------------------- */
+
+/* Scroller orizzontale senza barra visibile (caroselli). */
+.nf-scroll-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.nf-scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+/* Testo leggibile dagli screen reader ma non visibile a schermo. */
+.nf-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Placeholder animato mostrato durante il caricamento dei dati TMDB. */
+.nf-skeleton {
+  background: linear-gradient(
+    100deg,
+    var(--nf-surface) 30%,
+    var(--nf-surface-raised) 50%,
+    var(--nf-surface) 70%
+  );
+  background-size: 200% 100%;
+  animation: nf-shimmer 1.4s linear infinite;
+  border-radius: var(--nf-radius);
+}
+
+@keyframes nf-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
