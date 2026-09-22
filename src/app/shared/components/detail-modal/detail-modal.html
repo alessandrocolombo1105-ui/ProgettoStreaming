@@ -1,0 +1,151 @@
+<dialog
+  #dialog
+  class="modal"
+  [attr.aria-label]="title() || 'Dettagli del titolo'"
+  (close)="onDialogClose()"
+  (click)="onBackdropClick($event)"
+>
+  @if (target()) {
+    <article class="modal__panel">
+      <button type="button" class="modal__close" aria-label="Chiudi" (click)="close()">
+        <app-icon name="close" [size]="20" />
+      </button>
+
+      <!-- Testata: trailer se richiesto, altrimenti il backdrop -->
+      <header class="modal__hero">
+        @if (isPlaying() && trailerUrl(); as url) {
+          <iframe
+            class="modal__player"
+            [src]="url"
+            [title]="'Trailer di ' + title()"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+            allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin"
+          ></iframe>
+        } @else {
+          <img class="modal__backdrop" [src]="backdrop()" alt="" aria-hidden="true" />
+          <div class="modal__scrim"></div>
+
+          <div class="modal__hero-content">
+            <h2 class="modal__title">{{ title() }}</h2>
+
+            <div class="modal__actions">
+              @if (hasTrailer()) {
+                <button type="button" class="modal__btn modal__btn--play" (click)="play()">
+                  <app-icon name="play" [size]="19" [filled]="true" />
+                  Riproduci Trailer
+                </button>
+              } @else if (!isLoading()) {
+                <span class="modal__no-trailer">Trailer non disponibile</span>
+              }
+
+              @if (isAuthenticated()) {
+                <button
+                  type="button"
+                  class="modal__btn modal__btn--round"
+                  [class.is-saved]="isSaved()"
+                  [attr.aria-pressed]="isSaved()"
+                  [attr.aria-label]="
+                    isSaved() ? 'Rimuovi da La Mia Lista' : 'Aggiungi a La Mia Lista'
+                  "
+                  (click)="toggleList()"
+                >
+                  <app-icon [name]="isSaved() ? 'check' : 'plus'" [size]="19" />
+                </button>
+              } @else {
+                <a class="modal__btn modal__btn--ghost" routerLink="/login" (click)="close()">
+                  <app-icon name="plus" [size]="18" />
+                  Accedi per salvarlo
+                </a>
+              }
+            </div>
+          </div>
+        }
+      </header>
+
+      <div class="modal__body">
+        @if (isLoading()) {
+          <div class="nf-skeleton modal__skeleton"></div>
+          <div class="nf-skeleton modal__skeleton modal__skeleton--short"></div>
+        } @else if (errorMessage(); as message) {
+          <p class="modal__error">
+            <app-icon name="alert" [size]="18" />
+            {{ message }}
+          </p>
+        } @else if (details(); as item) {
+          <div class="modal__columns">
+            <div class="modal__main">
+              <p class="modal__meta">
+                @if (match(); as value) {
+                  <span class="modal__match">{{ value }}% consigliato</span>
+                }
+                @if (rating(); as value) {
+                  <span class="modal__rating">
+                    <app-icon name="star" [size]="14" [filled]="true" />
+                    {{ value }}
+                  </span>
+                }
+                @if (year(); as value) {
+                  <span>{{ value }}</span>
+                }
+                @if (duration(); as value) {
+                  <span>{{ value }}</span>
+                }
+              </p>
+
+              @if (item.tagline) {
+                <p class="modal__tagline">{{ item.tagline }}</p>
+              }
+
+              <p class="modal__overview">
+                {{ item.overview || 'Nessuna descrizione disponibile per questo titolo.' }}
+              </p>
+            </div>
+
+            <aside class="modal__aside">
+              @if (cast().length) {
+                <p class="modal__field">
+                  <span class="modal__label">Cast:</span>
+                  <span>
+                    @for (person of cast(); track person.id) {
+                      <span class="modal__person">{{ person.name }}</span>
+                    }
+                  </span>
+                </p>
+              }
+
+              @if (genres().length) {
+                <p class="modal__field">
+                  <span class="modal__label">Generi:</span>
+                  <span>
+                    @for (genre of genres(); track genre.id) {
+                      <span class="modal__person">{{ genre.name }}</span>
+                    }
+                  </span>
+                </p>
+              }
+
+              @if (item.status) {
+                <p class="modal__field">
+                  <span class="modal__label">Stato:</span>
+                  <span>{{ item.status }}</span>
+                </p>
+              }
+            </aside>
+          </div>
+
+          @if (similar().length) {
+            <section class="modal__similar">
+              <h3 class="modal__section-title">Titoli simili</h3>
+              <div class="modal__grid">
+                @for (media of similar(); track media.id) {
+                  <app-movie-card [media]="media" [posterLayout]="true" [interactive]="false" />
+                }
+              </div>
+            </section>
+          }
+        }
+      </div>
+    </article>
+  }
+</dialog>

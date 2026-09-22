@@ -56,6 +56,13 @@ export class MovieCard {
   /** Locandina verticale (2:3) invece del fotogramma orizzontale (16:9). */
   readonly posterLayout = input(false);
 
+  /**
+   * Abilita il pannello dettagli in hover. Va spento dentro contenitori che
+   * ritagliano l'overflow — come la modale — dove il pannello resterebbe
+   * comunque invisibile.
+   */
+  readonly interactive = input(true);
+
   /** Vero mentre il puntatore o il focus da tastiera insistono sulla scheda. */
   protected readonly isActive = signal(false);
 
@@ -87,7 +94,9 @@ export class MovieCard {
   protected readonly isAuthenticated = this.auth.isAuthenticated;
 
   protected activate(): void {
-    this.isActive.set(true);
+    if (this.interactive()) {
+      this.isActive.set(true);
+    }
   }
 
   protected deactivate(): void {

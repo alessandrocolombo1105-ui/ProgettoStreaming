@@ -1,0 +1,288 @@
+.modal {
+  width: min(900px, 94vw);
+  max-height: 92vh;
+  padding: 0;
+  border: 0;
+  border-radius: var(--nf-radius-lg);
+  background: var(--nf-surface);
+  color: var(--nf-text);
+  overflow: hidden auto;
+  box-shadow: var(--nf-shadow-modal);
+}
+
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(2px);
+}
+
+.modal[open] {
+  animation: modal-in 220ms var(--nf-ease);
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.modal__panel {
+  position: relative;
+}
+
+.modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.85);
+  color: var(--nf-text);
+  transition: background var(--nf-dur) var(--nf-ease);
+}
+
+.modal__close:hover {
+  background: var(--nf-surface-raised);
+}
+
+/* --------------------------------------------------------------------------
+   Testata
+   -------------------------------------------------------------------------- */
+
+.modal__hero {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.modal__player,
+.modal__backdrop {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.modal__backdrop {
+  object-fit: cover;
+}
+
+.modal__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--nf-surface) 2%, rgba(24, 24, 24, 0.25) 50%, transparent);
+}
+
+.modal__hero-content {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 0 40px 28px;
+}
+
+.modal__title {
+  font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+
+.modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.modal__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 22px;
+  border: 0;
+  border-radius: var(--nf-radius);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background var(--nf-dur) var(--nf-ease);
+}
+
+.modal__btn--play {
+  background: var(--nf-text);
+  color: #000;
+}
+
+.modal__btn--play:hover {
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.modal__btn--round {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  background: rgba(42, 42, 42, 0.7);
+  color: var(--nf-text);
+}
+
+.modal__btn--round:hover {
+  border-color: var(--nf-text);
+}
+
+.modal__btn--round.is-saved {
+  border-color: var(--nf-green);
+  color: var(--nf-green);
+}
+
+.modal__btn--ghost {
+  background: rgba(109, 109, 110, 0.7);
+  color: var(--nf-text);
+}
+
+.modal__btn--ghost:hover {
+  background: rgba(109, 109, 110, 0.45);
+}
+
+.modal__no-trailer {
+  font-size: 0.88rem;
+  color: var(--nf-text-dim);
+}
+
+/* --------------------------------------------------------------------------
+   Corpo
+   -------------------------------------------------------------------------- */
+
+.modal__body {
+  padding: 24px 40px 36px;
+}
+
+.modal__columns {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+}
+
+.modal__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.9rem;
+  color: var(--nf-text-muted);
+}
+
+.modal__match {
+  color: var(--nf-green);
+  font-weight: 700;
+}
+
+.modal__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #f5c518;
+  font-weight: 600;
+}
+
+.modal__tagline {
+  margin-top: 14px;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--nf-text-muted);
+}
+
+.modal__overview {
+  margin-top: 14px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.modal__aside {
+  font-size: 0.85rem;
+}
+
+.modal__field {
+  margin-bottom: 12px;
+  color: var(--nf-text);
+  line-height: 1.5;
+}
+
+.modal__label {
+  color: var(--nf-text-dim);
+  margin-right: 6px;
+}
+
+/* Elenchi separati da virgola senza doverle scrivere nel template. */
+.modal__person + .modal__person::before {
+  content: ', ';
+}
+
+.modal__error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ff6b6b;
+  font-size: 0.92rem;
+}
+
+.modal__skeleton {
+  height: 16px;
+  margin-bottom: 12px;
+}
+
+.modal__skeleton--short {
+  width: 60%;
+}
+
+/* --------------------------------------------------------------------------
+   Titoli simili
+   -------------------------------------------------------------------------- */
+
+.modal__similar {
+  margin-top: 34px;
+}
+
+.modal__section-title {
+  margin-bottom: 14px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.modal__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  /* Le schede dentro la griglia non si espandono: lo spazio non c'è. */
+  --nf-card-w: 100%;
+}
+
+@media (max-width: 720px) {
+  .modal__hero-content {
+    padding: 0 20px 18px;
+  }
+
+  .modal__body {
+    padding: 18px 20px 28px;
+  }
+
+  .modal__columns {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .modal__grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+}
