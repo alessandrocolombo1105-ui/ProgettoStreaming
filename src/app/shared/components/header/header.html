@@ -1,0 +1,130 @@
+<a class="brand" routerLink="/" aria-label="Xflix, vai alla home">XFLIX</a>
+
+<button
+  type="button"
+  class="burger"
+  [attr.aria-expanded]="isMenuOpen()"
+  aria-label="Apri il menu di navigazione"
+  (click)="toggleMenu()"
+>
+  <app-icon name="menu" [size]="22" />
+</button>
+
+<nav class="nav" [class.is-open]="isMenuOpen()" aria-label="Navigazione principale">
+  <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }"
+    (click)="closeAll()">Home</a>
+  <a routerLink="/film" routerLinkActive="is-active" (click)="closeAll()">Film</a>
+  <a routerLink="/serie-tv" routerLinkActive="is-active" (click)="closeAll()">Serie TV</a>
+  <a routerLink="/catalogo" routerLinkActive="is-active" (click)="closeAll()">Catalogo</a>
+  @if (isAuthenticated()) {
+    <a routerLink="/la-mia-lista" routerLinkActive="is-active" (click)="closeAll()">
+      La Mia Lista
+      @if (listCount() > 0) {
+        <span class="nav__count">{{ listCount() }}</span>
+      }
+    </a>
+  }
+</nav>
+
+<div class="actions">
+  <!-- Ricerca -->
+  <div class="search" [class.is-open]="isSearchOpen()">
+    <button
+      type="button"
+      class="icon-btn"
+      [attr.aria-expanded]="isSearchOpen()"
+      aria-label="Cerca film e serie TV"
+      (click)="toggleSearch()"
+    >
+      <app-icon name="search" [size]="20" />
+    </button>
+
+    @if (isSearchOpen()) {
+      <form class="search__form" role="search" (submit)="submitSearch($event)">
+        <input
+          #searchInput
+          type="search"
+          class="search__input"
+          [formControl]="searchControl"
+          placeholder="Titoli, generi, persone"
+          aria-label="Cerca titoli"
+          autocomplete="off"
+          enterkeyhint="search"
+        />
+        @if (hasQuery()) {
+          <button type="button" class="search__clear" aria-label="Cancella la ricerca"
+            (click)="clearSearch()">
+            <app-icon name="close" [size]="16" />
+          </button>
+        }
+      </form>
+    }
+
+    @if (showResults()) {
+      <!--
+        `aria-live` annuncia il numero di risultati agli screen reader: senza,
+        l'aggiornamento della lista avverrebbe in silenzio.
+      -->
+      <div class="results" role="region" aria-live="polite">
+        @if (isSearching()) {
+          <p class="results__hint">Ricerca in corso…</p>
+        } @else if (results().length === 0) {
+          <p class="results__hint">Nessun risultato per la tua ricerca.</p>
+        } @else {
+          <ul class="results__list">
+            @for (item of results(); track trackResult(item)) {
+              <li>
+                <button type="button" class="results__item" (click)="openResult(item)">
+                  <img class="results__poster" [src]="posterUrl(item)" [alt]="" aria-hidden="true"
+                    loading="lazy" />
+                  <span class="results__text">
+                    <span class="results__title">{{ resultTitle(item) }}</span>
+                    <span class="results__sub">{{ resultLabel(item) }}</span>
+                  </span>
+                </button>
+              </li>
+            }
+          </ul>
+          <button type="button" class="results__all" (click)="submitSearch($event)">
+            Vedi tutti i risultati
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Profilo -->
+  @if (isAuthenticated()) {
+    <div class="profile">
+      <button
+        type="button"
+        class="profile__trigger"
+        [attr.aria-expanded]="isProfileOpen()"
+        aria-label="Apri il menu del profilo"
+        (click)="toggleProfile()"
+      >
+        <span class="profile__avatar">{{ initials() }}</span>
+        <app-icon name="chevronDown" [size]="16" />
+      </button>
+
+      @if (isProfileOpen()) {
+        <div class="menu" role="menu">
+          <p class="menu__user">
+            <strong>{{ user()?.displayName }}</strong>
+            <span>{{ user()?.email }}</span>
+          </p>
+          <a class="menu__item" routerLink="/la-mia-lista" role="menuitem" (click)="closeAll()">
+            <app-icon name="star" [size]="16" />
+            La Mia Lista ({{ listCount() }})
+          </a>
+          <button type="button" class="menu__item" role="menuitem" (click)="signOut()">
+            <app-icon name="logout" [size]="16" />
+            Esci
+          </button>
+        </div>
+      }
+    </div>
+  } @else {
+    <a class="login-btn" routerLink="/login" (click)="closeAll()">Accedi</a>
+  }
+</div>

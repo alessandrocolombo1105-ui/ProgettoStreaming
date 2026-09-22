@@ -1,0 +1,80 @@
+@if (loading() || !media()) {
+  <div class="hero hero--loading" aria-hidden="true">
+    <div class="hero__content">
+      <div class="nf-skeleton hero__skeleton hero__skeleton--title"></div>
+      <div class="nf-skeleton hero__skeleton hero__skeleton--meta"></div>
+      <div class="nf-skeleton hero__skeleton hero__skeleton--text"></div>
+      <div class="nf-skeleton hero__skeleton hero__skeleton--text hero__skeleton--short"></div>
+      <div class="nf-skeleton hero__skeleton hero__skeleton--buttons"></div>
+    </div>
+  </div>
+} @else {
+  <section class="hero" [attr.aria-label]="'In evidenza: ' + title()">
+    <!--
+      Immagine reale invece di una background-image: `fetchpriority` la fa
+      scaricare per prima, visto che è il contenuto più grande della pagina.
+    -->
+    <img
+      class="hero__backdrop"
+      [src]="backdrop()"
+      alt=""
+      aria-hidden="true"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <div class="hero__scrim"></div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow">
+        <span class="hero__badge">{{ typeLabel() }}</span>
+        In evidenza oggi
+      </p>
+
+      <h1 class="hero__title">{{ title() }}</h1>
+
+      <p class="hero__meta">
+        @if (match(); as value) {
+          <span class="hero__match">{{ value }}% consigliato</span>
+        }
+        @if (rating(); as value) {
+          <span class="hero__rating">
+            <app-icon name="star" [size]="15" [filled]="true" />
+            {{ value }}
+          </span>
+        }
+        @if (year(); as value) {
+          <span>{{ value }}</span>
+        }
+        @for (genre of genreNames(); track genre) {
+          <span class="hero__genre">{{ genre }}</span>
+        }
+      </p>
+
+      @if (overview()) {
+        <p class="hero__overview">{{ overview() }}</p>
+      }
+
+      <div class="hero__actions">
+        <button type="button" class="hero__btn hero__btn--play" (click)="playTrailer()">
+          <app-icon name="play" [size]="20" [filled]="true" />
+          Riproduci Trailer
+        </button>
+
+        <button
+          type="button"
+          class="hero__btn hero__btn--list"
+          [attr.aria-pressed]="isSaved()"
+          (click)="toggleList()"
+        >
+          <app-icon [name]="isSaved() ? 'check' : 'plus'" [size]="20" />
+          {{ isSaved() ? 'Nella mia lista' : 'La Mia Lista' }}
+        </button>
+
+        <button type="button" class="hero__btn hero__btn--info" (click)="openDetails()">
+          <app-icon name="info" [size]="20" />
+          Altre info
+        </button>
+      </div>
+    </div>
+  </section>
+}
