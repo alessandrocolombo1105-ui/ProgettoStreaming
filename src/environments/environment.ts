@@ -9,7 +9,7 @@ export const environment = {
 
   tmdb: {
     /** API Key v3 di TMDB. Senza questo valore l'app mostra un banner di configurazione. */
-    apiKey: 'INSERISCI_QUI_LA_TUA_TMDB_API_KEY',
+    apiKey: '999302dd19e29d6f46fc4910e5ced3c3',
     baseUrl: 'https://api.themoviedb.org/3',
     imageBaseUrl: 'https://image.tmdb.org/t/p',
     /** Lingua dei metadati restituiti da TMDB. */
