@@ -189,7 +189,7 @@ export class DetailModal {
 
       if (target && !element.open) {
         element.showModal();
-        document.body.classList.add('nf-modal-open');
+        document.body.classList.add('lx-modal-open');
       } else if (!target && element.open) {
         element.close();
       }
@@ -212,7 +212,7 @@ export class DetailModal {
 
   /** Invocato anche dalla chiusura nativa con Esc, oltre che dal bottone. */
   protected onDialogClose(): void {
-    document.body.classList.remove('nf-modal-open');
+    document.body.classList.remove('lx-modal-open');
     this.isPlaying.set(false);
     if (this.target()) {
       this.modal.close();

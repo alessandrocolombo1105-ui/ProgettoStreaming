@@ -1,12 +1,33 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, delay, of, throwError } from 'rxjs';
 import { AuthError, AuthProvider, AuthSession, Credentials, SignUpData, User } from '../models';
+import { GoogleAuthService, GoogleProfile } from './google-auth.service';
 
 /** Record salvato dal mock: l'utente più la password, che non esce mai di qui. */
 interface StoredAccount {
   user: User;
   password: string;
 }
+
+/** Identità fittizia offerta dal selettore simulato. */
+export interface DemoAccount {
+  email: string;
+  name: string;
+  /** Colore dell'avatar, per distinguere gli account a colpo d'occhio. */
+  color: string;
+}
+
+/**
+ * Account del selettore simulato.
+ *
+ * Sono identità inventate e dichiarate come tali nell'interfaccia: non viene
+ * mai chiesta una password Google né imitata la schermata di accesso reale.
+ */
+export const DEMO_ACCOUNTS: readonly DemoAccount[] = [
+  { email: 'giulia.ferrari@example.com', name: 'Giulia Ferrari', color: '#7C5CFF' },
+  { email: 'marco.rossi@example.com', name: 'Marco Rossi', color: '#22D3EE' },
+  { email: 'sara.conti@example.com', name: 'Sara Conti', color: '#F472B6' },
+] as const;
 
 const ACCOUNTS_KEY = 'xflix.accounts';
 const SESSION_KEY = 'xflix.session';
@@ -27,6 +48,7 @@ const FAKE_LATENCY_MS = 450;
  */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly google = inject(GoogleAuthService);
   private readonly session = signal<AuthSession | null>(this.restoreSession());
 
   /** Utente corrente, `null` se non autenticato. */
@@ -85,26 +107,57 @@ export class AuthService {
   }
 
   /**
-   * Finto OAuth Google: salta la richiesta di password e riusa l'account
-   * esistente se l'email è già registrata, come farebbe un provider reale.
+   * Accesso con un profilo Google verificato dall'SDK.
+   *
+   * Se l'email è già registrata la sessione riusa quell'utente, come farebbe
+   * un provider reale: l'account non viene duplicato solo perché stavolta si
+   * è entrati da Google invece che con la password.
    */
-  signInWithGoogle(email = 'utente.demo@gmail.com'): Observable<AuthSession> {
-    const normalized = email.trim().toLowerCase();
+  signInWithGoogleProfile(profile: GoogleProfile): Observable<AuthSession> {
+    const normalized = profile.email.trim().toLowerCase();
     const accounts = this.readAccounts();
     const existing = accounts.find((item) => item.user.email === normalized);
 
     if (existing) {
-      return this.succeed(existing.user);
+      // Nome e avatar possono essere cambiati su Google dall'ultimo accesso.
+      const user: User = {
+        ...existing.user,
+        displayName: profile.name || existing.user.displayName,
+        avatarUrl: profile.picture ?? existing.user.avatarUrl,
+        provider: 'google',
+      };
+      this.writeAccounts(accounts.map((item) => (item.user.email === normalized ? { ...item, user } : item)));
+      return this.succeed(user);
     }
 
-    const user = this.buildUser(normalized, 'Utente Demo', 'google');
+    const user: User = {
+      ...this.buildUser(normalized, profile.name, 'google'),
+      avatarUrl: profile.picture,
+    };
     this.writeAccounts([...accounts, { user, password: '' }]);
     return this.succeed(user);
+  }
+
+  /**
+   * Percorso usato dal selettore di account simulato, attivo finché non viene
+   * configurato un Client ID Google. Condivide la stessa strada del profilo
+   * reale, così il resto dell'app non distingue i due casi.
+   */
+  signInWithDemoAccount(account: DemoAccount): Observable<AuthSession> {
+    return this.signInWithGoogleProfile({
+      sub: `demo-${account.email}`,
+      email: account.email,
+      name: account.name,
+      picture: null,
+    });
   }
 
   signOut(): void {
     this.session.set(null);
     this.removeItem(SESSION_KEY);
+    // Senza questo, Google rientrerebbe da solo con l'ultimo account usato,
+    // rendendo il logout apparentemente inefficace.
+    this.google.disableAutoSelect();
   }
 
   /* ----------------------------------------------------------------------

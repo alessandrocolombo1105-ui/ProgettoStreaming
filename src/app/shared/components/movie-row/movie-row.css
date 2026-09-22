@@ -1,29 +1,82 @@
 :host {
   display: block;
+  position: relative;
+  z-index: 1;
   /* Larghezza delle schede, ereditata dalle card figlie. */
-  --nf-card-w: 230px;
+  --lx-card-w: 236px;
 }
 
 .row {
   position: relative;
 }
 
-.row__title {
-  margin: 0 0 10px;
-  padding-inline: var(--nf-gutter);
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+/* Testata con titolo a sinistra e frecce a destra, sempre visibili. */
+.row__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-inline: var(--lx-gutter);
+  margin-bottom: 14px;
 }
 
-.row__viewport {
-  position: relative;
+.row__title {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 1.22rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+/* Barretta a gradiente che apre il titolo di sezione. */
+.row__title::before {
+  content: '';
+  width: 3px;
+  height: 20px;
+  border-radius: 3px;
+  background: var(--lx-accent-grad);
+}
+
+.row__nav {
+  display: flex;
+  gap: 7px;
+}
+
+.row__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--lx-border);
+  border-radius: 50%;
+  background: var(--lx-glass);
+  color: var(--lx-text);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    background var(--lx-dur) var(--lx-ease),
+    border-color var(--lx-dur) var(--lx-ease),
+    opacity var(--lx-dur) var(--lx-ease);
+}
+
+.row__arrow:hover:not(:disabled) {
+  background: var(--lx-glass-strong);
+  border-color: var(--lx-cyan);
+}
+
+/* Le frecce restano al loro posto anche a fine corsa, per non far ballare la
+   testata: diventano solo inattive. */
+.row__arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
 }
 
 .row__track {
   display: flex;
-  gap: 8px;
-  padding-inline: var(--nf-gutter);
+  gap: 14px;
+  padding-inline: var(--lx-gutter);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
@@ -32,8 +85,8 @@
     il padding inferiore riserva lo spazio al pannello della scheda espansa e
     il margine negativo lo riassorbe, lasciando invariato il flusso di pagina.
   */
-  padding-block: 8px 150px;
-  margin-bottom: -142px;
+  padding-block: 10px 160px;
+  margin-bottom: -150px;
 }
 
 .row__track > * {
@@ -42,61 +95,12 @@
 
 .row__skeleton {
   flex: 0 0 auto;
-  width: var(--nf-card-w);
+  width: var(--lx-card-w);
   aspect-ratio: 16 / 9;
 }
 
 .row__skeleton.is-poster {
   aspect-ratio: 2 / 3;
-}
-
-/* --------------------------------------------------------------------------
-   Frecce di scorrimento
-   -------------------------------------------------------------------------- */
-
-.row__arrow {
-  position: absolute;
-  top: 8px;
-  bottom: 150px;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--nf-gutter);
-  min-width: 44px;
-  border: 0;
-  background: rgba(0, 0, 0, 0.55);
-  color: var(--nf-text);
-  opacity: 0;
-  transition: opacity var(--nf-dur) var(--nf-ease), background var(--nf-dur) var(--nf-ease);
-}
-
-.row__arrow--prev {
-  left: 0;
-  border-radius: 0 var(--nf-radius) var(--nf-radius) 0;
-}
-
-.row__arrow--next {
-  right: 0;
-  border-radius: var(--nf-radius) 0 0 var(--nf-radius);
-}
-
-/* Le frecce restano nascoste finché il puntatore non entra nella riga. */
-.row__viewport:hover .row__arrow,
-.row__arrow:focus-visible {
-  opacity: 1;
-}
-
-.row__arrow:hover {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-.row__arrow app-icon {
-  transition: transform var(--nf-dur) var(--nf-ease);
-}
-
-.row__arrow:hover app-icon {
-  transform: scale(1.25);
 }
 
 /* --------------------------------------------------------------------------
@@ -107,38 +111,39 @@
 .row__empty {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding-inline: var(--nf-gutter);
+  gap: 9px;
+  padding-inline: var(--lx-gutter);
   font-size: 0.85rem;
-  color: var(--nf-text-dim);
+  color: var(--lx-text-dim);
 }
 
 .row__error {
-  color: #ff6b6b;
+  color: var(--lx-danger);
 }
 
 @media (max-width: 1100px) {
   :host {
-    --nf-card-w: 200px;
+    --lx-card-w: 206px;
   }
 }
 
 @media (max-width: 720px) {
   :host {
-    --nf-card-w: 160px;
+    --lx-card-w: 162px;
   }
 
   .row__title {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   /* Senza pannello espanso su touch, lo spazio extra non serve più. */
   .row__track {
     padding-block: 8px;
     margin-bottom: 0;
+    gap: 10px;
   }
 
-  .row__arrow {
+  .row__nav {
     display: none;
   }
 }

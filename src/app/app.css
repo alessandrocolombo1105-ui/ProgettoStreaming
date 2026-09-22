@@ -1,11 +1,10 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: var(--nf-bg);
 }
 
 /*
-  Ancorato in fondo alla finestra: in cima finirebbe sotto la navbar fissa,
+  Ancorato in fondo alla finestra: in cima finirebbe sotto la navbar flottante,
   e spostare la navbar per farvi spazio sfalserebbe l'aggancio dell'hero.
 */
 .setup {
@@ -15,42 +14,77 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px var(--nf-gutter);
-  background: #4a1a1d;
-  border-top: 1px solid rgba(229, 9, 20, 0.6);
-  color: #ffd9db;
-  font-size: 0.88rem;
+  padding: 13px var(--lx-gutter);
+  background: rgba(88, 28, 46, 0.92);
+  border-top: 1px solid rgba(251, 113, 133, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #ffd9de;
+  font-size: 0.87rem;
   line-height: 1.5;
 }
 
 .setup code {
-  padding: 1px 5px;
-  border-radius: 3px;
-  background: rgba(0, 0, 0, 0.45);
-  font-size: 0.85em;
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.4);
+  font-size: 0.88em;
 }
 
+/* Il contenuto resta sopra l'aurora disegnata su body::before. */
 .shell {
+  position: relative;
+  z-index: 1;
   display: block;
   min-height: 60vh;
 }
 
 .footer {
-  padding: 40px var(--nf-gutter) 50px;
-  border-top: 1px solid var(--nf-border);
-  color: var(--nf-text-dim);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0 var(--lx-gutter);
+  padding: 34px 0 44px;
+  border-top: 1px solid var(--lx-border);
+  color: var(--lx-text-dim);
   font-size: 0.82rem;
   line-height: 1.6;
 }
 
+.footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--lx-text-muted);
+}
+
+.footer__mark {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  background: var(--lx-accent-grad);
+  transform: rotate(45deg);
+}
+
 .footer a {
+  color: var(--lx-text-muted);
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .footer a:hover {
-  color: var(--nf-text);
+  color: var(--lx-cyan);
 }
 
-.footer__copy {
-  margin-top: 6px;
+@media (max-width: 640px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

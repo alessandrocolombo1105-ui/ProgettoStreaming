@@ -1,38 +1,51 @@
 /* ==========================================================================
-   Design system — tema scuro nativo in stile Netflix
+   Lumen — design system "Aurora Glass"
+   Vetro smerigliato e gradienti aurora su blu notte.
    ========================================================================== */
 
 :root {
   /* Superfici */
-  --nf-bg: #141414;
-  --nf-surface: #181818;
-  --nf-surface-hover: #232323;
-  --nf-surface-raised: #2a2a2a;
-  --nf-border: rgba(255, 255, 255, 0.12);
+  --lx-bg: #0b1020;
+  --lx-bg-deep: #070a16;
+  --lx-surface: #121a2e;
+  --lx-surface-2: #18223a;
+  --lx-surface-3: #1f2b47;
 
-  /* Accento */
-  --nf-red: #e50914;
-  --nf-red-hover: #f6121d;
+  /* Vetro: sfondo semitrasparente + bordo chiaro, sempre su backdrop-filter */
+  --lx-glass: rgba(255, 255, 255, 0.055);
+  --lx-glass-strong: rgba(255, 255, 255, 0.1);
+  --lx-border: rgba(255, 255, 255, 0.1);
+  --lx-border-strong: rgba(255, 255, 255, 0.2);
+
+  /* Accenti */
+  --lx-violet: #7c5cff;
+  --lx-cyan: #22d3ee;
+  --lx-pink: #f472b6;
+  --lx-accent-grad: linear-gradient(120deg, var(--lx-violet), var(--lx-cyan));
+  --lx-success: #34d399;
+  --lx-warn: #fbbf24;
+  --lx-danger: #fb7185;
 
   /* Testo */
-  --nf-text: #ffffff;
-  --nf-text-muted: #b3b3b3;
-  --nf-text-dim: #808080;
-  --nf-green: #46d369;
+  --lx-text: #f2f5ff;
+  --lx-text-muted: #96a0bf;
+  --lx-text-dim: #6b7594;
 
   /* Layout */
-  --nf-header-h: 68px;
-  --nf-gutter: 4vw;
-  --nf-radius: 6px;
-  --nf-radius-lg: 10px;
+  --lx-header-h: 76px;
+  --lx-gutter: clamp(16px, 4vw, 56px);
+  --lx-radius: 14px;
+  --lx-radius-lg: 22px;
+  --lx-radius-pill: 999px;
 
   /* Elevazione */
-  --nf-shadow-card: 0 12px 30px rgba(0, 0, 0, 0.65);
-  --nf-shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.8);
+  --lx-shadow: 0 18px 50px rgba(3, 6, 18, 0.7);
+  --lx-shadow-lg: 0 34px 90px rgba(3, 6, 18, 0.85);
+  --lx-glow: 0 0 0 1px rgba(124, 92, 255, 0.5), 0 12px 40px rgba(124, 92, 255, 0.3);
 
   /* Motion */
-  --nf-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-  --nf-dur: 280ms;
+  --lx-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --lx-dur: 260ms;
 
   color-scheme: dark;
 }
@@ -50,17 +63,34 @@ body {
 
 body {
   margin: 0;
-  background-color: var(--nf-bg);
-  color: var(--nf-text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  background-color: var(--lx-bg);
+  color: var(--lx-text);
+  font-family: 'Sora', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Blocca lo scroll del documento mentre la modale dettagli è aperta. */
-body.nf-modal-open {
+/*
+  Aurora di fondo: due aloni sfocati fissi dietro tutto il contenuto.
+  Restano ancorati alla finestra mentre la pagina scorre, così l'atmosfera non
+  scompare dopo il primo schermo.
+*/
+body::before {
+  content: '';
+  position: fixed;
+  inset: -20% -10% auto -10%;
+  height: 90vh;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(45% 55% at 18% 8%, rgba(124, 92, 255, 0.4), transparent 70%),
+    radial-gradient(40% 50% at 82% 22%, rgba(34, 211, 238, 0.26), transparent 72%),
+    radial-gradient(35% 45% at 55% 0%, rgba(244, 114, 182, 0.16), transparent 70%);
+  filter: blur(30px);
+}
+
+body.lx-modal-open {
   overflow: hidden;
 }
 
@@ -88,11 +118,10 @@ img {
   max-width: 100%;
 }
 
-/* Focus ring coerente su tutta l'app, visibile solo da tastiera. */
 :focus-visible {
-  outline: 2px solid var(--nf-text);
+  outline: 2px solid var(--lx-cyan);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: 6px;
 }
 
 /* --------------------------------------------------------------------------
@@ -100,17 +129,16 @@ img {
    -------------------------------------------------------------------------- */
 
 /* Scroller orizzontale senza barra visibile (caroselli). */
-.nf-scroll-hidden {
+.lx-scroll-hidden {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-.nf-scroll-hidden::-webkit-scrollbar {
+.lx-scroll-hidden::-webkit-scrollbar {
   display: none;
 }
 
-/* Testo leggibile dagli screen reader ma non visibile a schermo. */
-.nf-sr-only {
+.lx-sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -122,46 +150,57 @@ img {
   border: 0;
 }
 
-/*
-  Pila di caroselli sotto l'hero. Risale sul banner per continuarne la
-  sfumatura senza stacco netto, come nelle pagine di Netflix.
-*/
-.nf-rows {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 34px;
-  margin-top: -9vh;
-  padding-bottom: 60px;
+/* Testo con riempimento a gradiente, per i titoli di sezione principali. */
+.lx-gradient-text {
+  background: var(--lx-accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-@media (max-width: 860px) {
-  .nf-rows {
-    gap: 24px;
-    margin-top: -5vh;
-  }
+/* Pannello di vetro: la base di navbar, schede, modale e filtri. */
+.lx-glass {
+  background: var(--lx-glass);
+  border: 1px solid var(--lx-border);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
 }
 
-/* Placeholder animato mostrato durante il caricamento dei dati TMDB. */
-.nf-skeleton {
+/* Placeholder animato durante il caricamento dei dati TMDB. */
+.lx-skeleton {
   background: linear-gradient(
     100deg,
-    var(--nf-surface) 30%,
-    var(--nf-surface-raised) 50%,
-    var(--nf-surface) 70%
+    var(--lx-surface) 30%,
+    var(--lx-surface-3) 50%,
+    var(--lx-surface) 70%
   );
   background-size: 200% 100%;
-  animation: nf-shimmer 1.4s linear infinite;
-  border-radius: var(--nf-radius);
+  animation: lx-shimmer 1.4s linear infinite;
+  border-radius: var(--lx-radius);
 }
 
-@keyframes nf-shimmer {
+@keyframes lx-shimmer {
   from {
     background-position: 200% 0;
   }
   to {
     background-position: -200% 0;
+  }
+}
+
+/* Pila di caroselli sotto l'hero. */
+.lx-rows {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 46px;
+  padding-bottom: 80px;
+}
+
+@media (max-width: 860px) {
+  .lx-rows {
+    gap: 32px;
   }
 }
 

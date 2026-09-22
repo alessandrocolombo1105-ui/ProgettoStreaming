@@ -65,8 +65,8 @@
 
       <div class="modal__body">
         @if (isLoading()) {
-          <div class="nf-skeleton modal__skeleton"></div>
-          <div class="nf-skeleton modal__skeleton modal__skeleton--short"></div>
+          <div class="lx-skeleton modal__skeleton"></div>
+          <div class="lx-skeleton modal__skeleton modal__skeleton--short"></div>
         } @else if (errorMessage(); as message) {
           <p class="modal__error">
             <app-icon name="alert" [size]="18" />

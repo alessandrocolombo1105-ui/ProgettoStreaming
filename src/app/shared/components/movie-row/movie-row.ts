@@ -46,6 +46,7 @@ export class MovieRow {
   protected readonly hasItems = computed(() => this.items().length > 0);
 
   constructor() {
+
     // Alla prima comparsa delle schede la posizione di scorrimento non ha
     // ancora generato eventi: senza questo calcolo le frecce resterebbero
     // nello stato iniziale anche su liste più corte della finestra.
@@ -54,9 +55,6 @@ export class MovieRow {
       this.onScroll();
     });
   }
-
-  /** Nessuna freccia quando il contenuto sta già tutto nello schermo. */
-  protected readonly showArrows = computed(() => !this.atStart() || !this.atEnd());
 
   /** Chiave stabile per `@for`: gli id TMDB si ripetono fra film e serie. */
   protected trackByMedia(_index: number, item: MediaItem): string {

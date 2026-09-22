@@ -1,11 +1,11 @@
 @if (loading() || !media()) {
   <div class="hero hero--loading" aria-hidden="true">
-    <div class="hero__content">
-      <div class="nf-skeleton hero__skeleton hero__skeleton--title"></div>
-      <div class="nf-skeleton hero__skeleton hero__skeleton--meta"></div>
-      <div class="nf-skeleton hero__skeleton hero__skeleton--text"></div>
-      <div class="nf-skeleton hero__skeleton hero__skeleton--text hero__skeleton--short"></div>
-      <div class="nf-skeleton hero__skeleton hero__skeleton--buttons"></div>
+    <div class="hero__panel">
+      <div class="lx-skeleton hero__skeleton hero__skeleton--eyebrow"></div>
+      <div class="lx-skeleton hero__skeleton hero__skeleton--title"></div>
+      <div class="lx-skeleton hero__skeleton hero__skeleton--text"></div>
+      <div class="lx-skeleton hero__skeleton hero__skeleton--text hero__skeleton--short"></div>
+      <div class="lx-skeleton hero__skeleton hero__skeleton--buttons"></div>
     </div>
   </div>
 } @else {
@@ -24,29 +24,33 @@
     />
     <div class="hero__scrim"></div>
 
-    <div class="hero__content">
+    <!-- Pannello di vetro: il contenuto non galleggia sull'immagine nuda. -->
+    <div class="hero__panel">
       <p class="hero__eyebrow">
         <span class="hero__badge">{{ typeLabel() }}</span>
-        In evidenza oggi
+        <span class="hero__eyebrow-text">In evidenza oggi</span>
       </p>
 
       <h1 class="hero__title">{{ title() }}</h1>
 
       <p class="hero__meta">
         @if (match(); as value) {
-          <span class="hero__match">{{ value }}% consigliato</span>
+          <span class="hero__score">
+            <span class="hero__score-ring" [style.--score]="value"></span>
+            {{ value }}%
+          </span>
         }
         @if (rating(); as value) {
           <span class="hero__rating">
-            <app-icon name="star" [size]="15" [filled]="true" />
+            <app-icon name="star" [size]="14" [filled]="true" />
             {{ value }}
           </span>
         }
         @if (year(); as value) {
-          <span>{{ value }}</span>
+          <span class="hero__chip">{{ value }}</span>
         }
         @for (genre of genreNames(); track genre) {
-          <span class="hero__genre">{{ genre }}</span>
+          <span class="hero__chip">{{ genre }}</span>
         }
       </p>
 
@@ -56,23 +60,24 @@
 
       <div class="hero__actions">
         <button type="button" class="hero__btn hero__btn--play" (click)="playTrailer()">
-          <app-icon name="play" [size]="20" [filled]="true" />
-          Riproduci Trailer
+          <app-icon name="play" [size]="18" [filled]="true" />
+          Guarda il trailer
         </button>
 
         <button
           type="button"
-          class="hero__btn hero__btn--list"
+          class="hero__btn hero__btn--ghost"
+          [class.is-saved]="isSaved()"
           [attr.aria-pressed]="isSaved()"
           (click)="toggleList()"
         >
-          <app-icon [name]="isSaved() ? 'check' : 'plus'" [size]="20" />
-          {{ isSaved() ? 'Nella mia lista' : 'La Mia Lista' }}
+          <app-icon [name]="isSaved() ? 'check' : 'plus'" [size]="18" />
+          {{ isSaved() ? 'Salvato' : 'Salva' }}
         </button>
 
-        <button type="button" class="hero__btn hero__btn--info" (click)="openDetails()">
-          <app-icon name="info" [size]="20" />
-          Altre info
+        <button type="button" class="hero__btn hero__btn--ghost" (click)="openDetails()">
+          <app-icon name="info" [size]="18" />
+          Dettagli
         </button>
       </div>
     </div>

@@ -1,44 +1,50 @@
 <section class="row" [attr.aria-label]="title()">
-  <h2 class="row__title">{{ title() }}</h2>
-
-  <div class="row__viewport">
-    @if (showArrows() && !atStart()) {
-      <button
-        type="button"
-        class="row__arrow row__arrow--prev"
-        aria-label="Scorri indietro"
-        (click)="scroll(-1)"
-      >
-        <app-icon name="chevronLeft" [size]="28" [strokeWidth]="2.5" />
-      </button>
-    }
+  <div class="row__head">
+    <h2 class="row__title">{{ title() }}</h2>
 
     <!--
-      `scroll` aggiorna solo due signal booleani: è abbastanza leggero da non
-      richiedere throttling, e Angular in zoneless non riesegue il rendering se
-      i valori non cambiano davvero.
+      Le frecce vivono nella testata e restano sempre presenti, disabilitate a
+      fine corsa: comparire e sparire al passaggio del mouse le renderebbe
+      inutilizzabili da tastiera e farebbe saltare il layout.
     -->
-    <div #track class="row__track nf-scroll-hidden" (scroll)="onScroll()">
-      @if (loading()) {
-        @for (item of skeletons; track item) {
-          <div class="row__skeleton nf-skeleton" [class.is-poster]="posterLayout()"></div>
-        }
-      } @else {
-        @for (item of items(); track trackByMedia($index, item)) {
-          <app-movie-card [media]="item" [posterLayout]="posterLayout()" />
-        }
-      }
-    </div>
+    @if (hasItems()) {
+      <div class="row__nav">
+        <button
+          type="button"
+          class="row__arrow"
+          aria-label="Scorri indietro"
+          [disabled]="atStart()"
+          (click)="scroll(-1)"
+        >
+          <app-icon name="chevronLeft" [size]="19" />
+        </button>
+        <button
+          type="button"
+          class="row__arrow"
+          aria-label="Scorri avanti"
+          [disabled]="atEnd()"
+          (click)="scroll(1)"
+        >
+          <app-icon name="chevronRight" [size]="19" />
+        </button>
+      </div>
+    }
+  </div>
 
-    @if (showArrows() && !atEnd() && hasItems()) {
-      <button
-        type="button"
-        class="row__arrow row__arrow--next"
-        aria-label="Scorri avanti"
-        (click)="scroll(1)"
-      >
-        <app-icon name="chevronRight" [size]="28" [strokeWidth]="2.5" />
-      </button>
+  <!--
+    `scroll` aggiorna solo due signal booleani: è abbastanza leggero da non
+    richiedere throttling, e in zoneless Angular non rirenderizza se i valori
+    non cambiano davvero.
+  -->
+  <div #track class="row__track lx-scroll-hidden" (scroll)="onScroll()">
+    @if (loading()) {
+      @for (item of skeletons; track item) {
+        <div class="row__skeleton lx-skeleton" [class.is-poster]="posterLayout()"></div>
+      }
+    } @else {
+      @for (item of items(); track trackByMedia($index, item)) {
+        <app-movie-card [media]="item" [posterLayout]="posterLayout()" />
+      }
     }
   </div>
 

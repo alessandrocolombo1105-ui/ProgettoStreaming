@@ -17,4 +17,23 @@ export const environment = {
     /** Regione usata per date di uscita e disponibilità. */
     region: 'IT',
   },
+
+  google: {
+    /**
+     * OAuth Client ID per "Accedi con Google" (gratuito).
+     *
+     * Come ottenerlo, in 5 minuti:
+     *  1. https://console.cloud.google.com/ → crea un progetto
+     *  2. "API e servizi" → "Schermata consenso OAuth" → tipo "Esterno", compila
+     *     nome app ed email, salva
+     *  3. "Credenziali" → "Crea credenziali" → "ID client OAuth" →
+     *     tipo "Applicazione web"
+     *  4. In "Origini JavaScript autorizzate" aggiungi: http://localhost:4200
+     *  5. Copia l'ID (finisce con .apps.googleusercontent.com) e incollalo qui
+     *
+     * Finché resta il segnaposto, l'app usa un selettore di account simulato,
+     * dichiarato come tale nell'interfaccia.
+     */
+    clientId: 'INSERISCI_QUI_IL_TUO_GOOGLE_CLIENT_ID',
+  },
 } as const;

@@ -1,18 +1,20 @@
 .page {
-  padding: calc(var(--nf-header-h) + 34px) var(--nf-gutter) 80px;
+  position: relative;
+  z-index: 1;
+  padding: calc(var(--lx-header-h) + 30px) var(--lx-gutter) 90px;
   min-height: 100vh;
 }
 
 .page__title {
-  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  font-size: clamp(2rem, 4vw, 3.1rem);
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.035em;
 }
 
 .page__sub {
-  margin-top: 6px;
-  color: var(--nf-text-muted);
-  font-size: 0.95rem;
+  margin-top: 8px;
+  color: var(--lx-text-muted);
+  font-size: 0.98rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -21,9 +23,9 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-  gap: 18px;
-  margin: 30px 0 0;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 20px;
+  margin: 34px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -36,15 +38,20 @@
   display: block;
   width: 100%;
   padding: 0;
-  border: 0;
-  border-radius: var(--nf-radius);
+  border: 1px solid var(--lx-border);
+  border-radius: var(--lx-radius);
   overflow: hidden;
-  background: var(--nf-surface);
-  transition: transform var(--nf-dur) var(--nf-ease);
+  background: var(--lx-surface);
+  transition:
+    transform var(--lx-dur) var(--lx-ease),
+    border-color var(--lx-dur) var(--lx-ease),
+    box-shadow var(--lx-dur) var(--lx-ease);
 }
 
 .tile__open:hover {
-  transform: scale(1.04);
+  transform: translateY(-5px);
+  border-color: rgba(124, 92, 255, 0.6);
+  box-shadow: 0 18px 44px rgba(5, 8, 20, 0.7), 0 8px 30px rgba(124, 92, 255, 0.26);
 }
 
 .tile__poster {
@@ -55,21 +62,24 @@
 
 .tile__remove {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 9px;
+  right: 9px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: 0;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--lx-border);
   border-radius: 50%;
-  background: rgba(20, 20, 20, 0.85);
-  color: var(--nf-text-muted);
+  background: rgba(11, 16, 32, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--lx-text-muted);
   opacity: 0;
   transition:
-    opacity var(--nf-dur) var(--nf-ease),
-    color var(--nf-dur) var(--nf-ease);
+    opacity var(--lx-dur) var(--lx-ease),
+    color var(--lx-dur) var(--lx-ease),
+    border-color var(--lx-dur) var(--lx-ease);
 }
 
 /* Il bottone resta visibile anche da tastiera, non solo al passaggio del mouse. */
@@ -79,17 +89,18 @@
 }
 
 .tile__remove:hover {
-  color: var(--nf-red);
+  color: var(--lx-danger);
+  border-color: var(--lx-danger);
 }
 
 .tile__info {
-  margin-top: 9px;
+  margin-top: 11px;
 }
 
 .tile__title {
   font-size: 0.9rem;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.35;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -101,16 +112,16 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 5px;
-  font-size: 0.76rem;
-  color: var(--nf-text-dim);
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--lx-text-dim);
 }
 
 .tile__badge {
-  padding: 1px 5px;
-  border: 1px solid var(--nf-border);
-  border-radius: 3px;
-  font-size: 0.66rem;
+  padding: 2px 8px;
+  border: 1px solid var(--lx-border);
+  border-radius: var(--lx-radius-pill);
+  font-size: 0.64rem;
   text-transform: uppercase;
 }
 
@@ -122,16 +133,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 90px 20px;
+  gap: 11px;
+  margin-top: 40px;
+  padding: 80px 24px;
+  border-radius: var(--lx-radius-lg);
+  border: 1px dashed var(--lx-border-strong);
+  background: var(--lx-glass);
   text-align: center;
-  color: var(--nf-text-dim);
+  color: var(--lx-text-dim);
 }
 
 .empty__text {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  color: var(--nf-text);
+  color: var(--lx-text);
 }
 
 .empty__hint {
@@ -139,23 +154,26 @@
 }
 
 .empty__cta {
-  margin-top: 14px;
-  padding: 11px 26px;
-  border-radius: var(--nf-radius);
-  background: var(--nf-red);
-  color: var(--nf-text);
-  font-weight: 600;
-  transition: background var(--nf-dur) var(--nf-ease);
+  margin-top: 16px;
+  padding: 12px 28px;
+  border-radius: var(--lx-radius-pill);
+  background: var(--lx-accent-grad);
+  color: #0b1020;
+  font-weight: 700;
+  transition:
+    filter var(--lx-dur) var(--lx-ease),
+    box-shadow var(--lx-dur) var(--lx-ease);
 }
 
 .empty__cta:hover {
-  background: var(--nf-red-hover);
+  filter: brightness(1.12);
+  box-shadow: 0 10px 32px rgba(124, 92, 255, 0.42);
 }
 
 @media (max-width: 720px) {
   .grid {
-    grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+    gap: 13px;
   }
 
   /* Senza hover il bottone di rimozione dev'essere sempre visibile. */

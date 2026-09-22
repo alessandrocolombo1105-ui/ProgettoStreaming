@@ -1,4 +1,7 @@
-<a class="brand" routerLink="/" aria-label="Xflix, vai alla home">XFLIX</a>
+<a class="brand" routerLink="/" aria-label="Lumen, vai alla home">
+  <span class="brand__mark" aria-hidden="true"></span>
+  <span>LUMEN</span>
+</a>
 
 <button
   type="button"
@@ -15,10 +18,10 @@
     (click)="closeAll()">Home</a>
   <a routerLink="/film" routerLinkActive="is-active" (click)="closeAll()">Film</a>
   <a routerLink="/serie-tv" routerLinkActive="is-active" (click)="closeAll()">Serie TV</a>
-  <a routerLink="/catalogo" routerLinkActive="is-active" (click)="closeAll()">Catalogo</a>
+  <a routerLink="/catalogo" routerLinkActive="is-active" (click)="closeAll()">Esplora</a>
   @if (isAuthenticated()) {
     <a routerLink="/la-mia-lista" routerLinkActive="is-active" (click)="closeAll()">
-      La Mia Lista
+      Salvati
       @if (listCount() > 0) {
         <span class="nav__count">{{ listCount() }}</span>
       }
@@ -36,7 +39,7 @@
       aria-label="Cerca film e serie TV"
       (click)="toggleSearch()"
     >
-      <app-icon name="search" [size]="20" />
+      <app-icon name="search" [size]="19" />
     </button>
 
     @if (isSearchOpen()) {
@@ -46,7 +49,7 @@
           type="search"
           class="search__input"
           [formControl]="searchControl"
-          placeholder="Titoli, generi, persone"
+          placeholder="Cerca un titolo…"
           aria-label="Cerca titoli"
           autocomplete="off"
           enterkeyhint="search"
@@ -54,7 +57,7 @@
         @if (hasQuery()) {
           <button type="button" class="search__clear" aria-label="Cancella la ricerca"
             (click)="clearSearch()">
-            <app-icon name="close" [size]="16" />
+            <app-icon name="close" [size]="15" />
           </button>
         }
       </form>
@@ -62,8 +65,8 @@
 
     @if (showResults()) {
       <!--
-        `aria-live` annuncia il numero di risultati agli screen reader: senza,
-        l'aggiornamento della lista avverrebbe in silenzio.
+        `aria-live` annuncia l'esito agli screen reader: senza, l'aggiornamento
+        della lista avverrebbe in silenzio.
       -->
       <div class="results" role="region" aria-live="polite">
         @if (isSearching()) {
@@ -75,7 +78,7 @@
             @for (item of results(); track trackResult(item)) {
               <li>
                 <button type="button" class="results__item" (click)="openResult(item)">
-                  <img class="results__poster" [src]="posterUrl(item)" [alt]="" aria-hidden="true"
+                  <img class="results__poster" [src]="posterUrl(item)" alt="" aria-hidden="true"
                     loading="lazy" />
                   <span class="results__text">
                     <span class="results__title">{{ resultTitle(item) }}</span>
@@ -103,8 +106,14 @@
         aria-label="Apri il menu del profilo"
         (click)="toggleProfile()"
       >
-        <span class="profile__avatar">{{ initials() }}</span>
-        <app-icon name="chevronDown" [size]="16" />
+        <span class="profile__avatar">
+          @if (user()?.avatarUrl; as photo) {
+            <img class="profile__photo" [src]="photo" alt="" aria-hidden="true" referrerpolicy="no-referrer" />
+          } @else {
+            {{ initials() }}
+          }
+        </span>
+        <app-icon name="chevronDown" [size]="15" />
       </button>
 
       @if (isProfileOpen()) {
@@ -112,10 +121,13 @@
           <p class="menu__user">
             <strong>{{ user()?.displayName }}</strong>
             <span>{{ user()?.email }}</span>
+            <span class="menu__provider">
+              {{ user()?.provider === 'google' ? 'Google' : 'Email' }}
+            </span>
           </p>
           <a class="menu__item" routerLink="/la-mia-lista" role="menuitem" (click)="closeAll()">
             <app-icon name="star" [size]="16" />
-            La Mia Lista ({{ listCount() }})
+            I miei salvati ({{ listCount() }})
           </a>
           <button type="button" class="menu__item" role="menuitem" (click)="signOut()">
             <app-icon name="logout" [size]="16" />
