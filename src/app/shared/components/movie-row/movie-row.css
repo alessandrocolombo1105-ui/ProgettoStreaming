@@ -1,0 +1,144 @@
+:host {
+  display: block;
+  /* Larghezza delle schede, ereditata dalle card figlie. */
+  --nf-card-w: 230px;
+}
+
+.row {
+  position: relative;
+}
+
+.row__title {
+  margin: 0 0 10px;
+  padding-inline: var(--nf-gutter);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.row__viewport {
+  position: relative;
+}
+
+.row__track {
+  display: flex;
+  gap: 8px;
+  padding-inline: var(--nf-gutter);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  /*
+    Un contenitore con overflow-x non può mostrare ciò che esce in verticale:
+    il padding inferiore riserva lo spazio al pannello della scheda espansa e
+    il margine negativo lo riassorbe, lasciando invariato il flusso di pagina.
+  */
+  padding-block: 8px 150px;
+  margin-bottom: -142px;
+}
+
+.row__track > * {
+  scroll-snap-align: start;
+}
+
+.row__skeleton {
+  flex: 0 0 auto;
+  width: var(--nf-card-w);
+  aspect-ratio: 16 / 9;
+}
+
+.row__skeleton.is-poster {
+  aspect-ratio: 2 / 3;
+}
+
+/* --------------------------------------------------------------------------
+   Frecce di scorrimento
+   -------------------------------------------------------------------------- */
+
+.row__arrow {
+  position: absolute;
+  top: 8px;
+  bottom: 150px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--nf-gutter);
+  min-width: 44px;
+  border: 0;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--nf-text);
+  opacity: 0;
+  transition: opacity var(--nf-dur) var(--nf-ease), background var(--nf-dur) var(--nf-ease);
+}
+
+.row__arrow--prev {
+  left: 0;
+  border-radius: 0 var(--nf-radius) var(--nf-radius) 0;
+}
+
+.row__arrow--next {
+  right: 0;
+  border-radius: var(--nf-radius) 0 0 var(--nf-radius);
+}
+
+/* Le frecce restano nascoste finché il puntatore non entra nella riga. */
+.row__viewport:hover .row__arrow,
+.row__arrow:focus-visible {
+  opacity: 1;
+}
+
+.row__arrow:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.row__arrow app-icon {
+  transition: transform var(--nf-dur) var(--nf-ease);
+}
+
+.row__arrow:hover app-icon {
+  transform: scale(1.25);
+}
+
+/* --------------------------------------------------------------------------
+   Stati
+   -------------------------------------------------------------------------- */
+
+.row__error,
+.row__empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-inline: var(--nf-gutter);
+  font-size: 0.85rem;
+  color: var(--nf-text-dim);
+}
+
+.row__error {
+  color: #ff6b6b;
+}
+
+@media (max-width: 1100px) {
+  :host {
+    --nf-card-w: 200px;
+  }
+}
+
+@media (max-width: 720px) {
+  :host {
+    --nf-card-w: 160px;
+  }
+
+  .row__title {
+    font-size: 1.1rem;
+  }
+
+  /* Senza pannello espanso su touch, lo spazio extra non serve più. */
+  .row__track {
+    padding-block: 8px;
+    margin-bottom: 0;
+  }
+
+  .row__arrow {
+    display: none;
+  }
+}

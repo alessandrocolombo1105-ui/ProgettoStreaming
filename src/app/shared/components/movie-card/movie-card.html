@@ -1,0 +1,73 @@
+<!--
+  L'immagine è un bottone a sé: i controlli rapidi vivono nel pannello sotto,
+  perché annidare bottoni dentro un bottone non è markup valido e li renderebbe
+  irraggiungibili da tastiera.
+-->
+<button
+  type="button"
+  class="card__open"
+  [attr.aria-label]="'Apri i dettagli di ' + title()"
+  (click)="openDetails()"
+>
+  <img class="card__image" [src]="imageUrl()" [alt]="title()" loading="lazy" decoding="async" />
+
+  <!-- Il fotogramma spesso non contiene il titolo: qui resta sempre leggibile. -->
+  <span class="card__caption">{{ title() }}</span>
+</button>
+
+@if (isActive()) {
+  <div class="card__panel">
+    <div class="card__actions">
+      <button
+        type="button"
+        class="card__action card__action--play"
+        [attr.aria-label]="'Riproduci il trailer di ' + title()"
+        (click)="playTrailer()"
+      >
+        <app-icon name="play" [size]="16" [filled]="true" />
+      </button>
+
+      <button
+        type="button"
+        class="card__action"
+        [class.card__action--saved]="isSaved()"
+        [attr.aria-pressed]="isSaved()"
+        [attr.aria-label]="
+          isSaved()
+            ? 'Rimuovi ' + title() + ' da La Mia Lista'
+            : 'Aggiungi ' + title() + ' a La Mia Lista'
+        "
+        (click)="toggleList()"
+      >
+        <app-icon [name]="isSaved() ? 'check' : 'plus'" [size]="16" />
+      </button>
+
+      <button
+        type="button"
+        class="card__action card__action--info"
+        [attr.aria-label]="'Altre informazioni su ' + title()"
+        (click)="openDetails()"
+      >
+        <app-icon name="chevronDown" [size]="16" />
+      </button>
+    </div>
+
+    <p class="card__meta">
+      @if (match(); as value) {
+        <span class="card__match">{{ value }}% consigliato</span>
+      }
+      @if (year(); as value) {
+        <span>{{ value }}</span>
+      }
+      <span class="card__badge">{{ typeLabel() }}</span>
+    </p>
+
+    @if (genreNames().length) {
+      <p class="card__genres">
+        @for (genre of genreNames(); track genre) {
+          <span class="card__genre">{{ genre }}</span>
+        }
+      </p>
+    }
+  </div>
+}

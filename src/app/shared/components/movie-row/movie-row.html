@@ -1,0 +1,53 @@
+<section class="row" [attr.aria-label]="title()">
+  <h2 class="row__title">{{ title() }}</h2>
+
+  <div class="row__viewport">
+    @if (showArrows() && !atStart()) {
+      <button
+        type="button"
+        class="row__arrow row__arrow--prev"
+        aria-label="Scorri indietro"
+        (click)="scroll(-1)"
+      >
+        <app-icon name="chevronLeft" [size]="28" [strokeWidth]="2.5" />
+      </button>
+    }
+
+    <!--
+      `scroll` aggiorna solo due signal booleani: è abbastanza leggero da non
+      richiedere throttling, e Angular in zoneless non riesegue il rendering se
+      i valori non cambiano davvero.
+    -->
+    <div #track class="row__track nf-scroll-hidden" (scroll)="onScroll()">
+      @if (loading()) {
+        @for (item of skeletons; track item) {
+          <div class="row__skeleton nf-skeleton" [class.is-poster]="posterLayout()"></div>
+        }
+      } @else {
+        @for (item of items(); track trackByMedia($index, item)) {
+          <app-movie-card [media]="item" [posterLayout]="posterLayout()" />
+        }
+      }
+    </div>
+
+    @if (showArrows() && !atEnd() && hasItems()) {
+      <button
+        type="button"
+        class="row__arrow row__arrow--next"
+        aria-label="Scorri avanti"
+        (click)="scroll(1)"
+      >
+        <app-icon name="chevronRight" [size]="28" [strokeWidth]="2.5" />
+      </button>
+    }
+  </div>
+
+  @if (error(); as message) {
+    <p class="row__error">
+      <app-icon name="alert" [size]="16" />
+      {{ message }}
+    </p>
+  } @else if (!loading() && !hasItems()) {
+    <p class="row__empty">Nessun titolo disponibile in questa sezione.</p>
+  }
+</section>
