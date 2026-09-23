@@ -17,14 +17,15 @@ import { DetailModalService } from '../../../core/services/detail-modal.service'
 import { MyListService } from '../../../core/services/my-list.service';
 import { TmdbService } from '../../../core/services/tmdb.service';
 import { getMediaTitle, getMediaYear, resolveMediaType } from '../../../core/utils/media.util';
+import { TitlePart, rankByRelevance, splitOnMatch } from '../../../core/utils/search.util';
 import { Icon } from '../icon/icon';
 
-/** Sotto questa soglia la ricerca non parte: due lettere danno solo rumore. */
-const MIN_QUERY_LENGTH = 2;
+/** Sotto tre lettere la ricerca non parte: restituirebbe solo rumore. */
+const MIN_QUERY_LENGTH = 3;
 /** Pausa dopo l'ultima battitura prima di interrogare TMDB. */
 const SEARCH_DEBOUNCE_MS = 300;
-/** Risultati mostrati nel menu a tendina; il resto si vede nel catalogo. */
-const QUICK_RESULTS = 7;
+/** Titoli caricati nel carosello; il resto si vede nel catalogo. */
+const CAROUSEL_RESULTS = 20;
 
 /**
  * Barra di navigazione fissa con ricerca in tempo reale.
@@ -70,35 +71,53 @@ export class Header {
   protected readonly isAuthenticated = this.auth.isAuthenticated;
   protected readonly listCount = this.myList.count;
 
-  /** Risultati rapidi della ricerca, aggiornati mentre l'utente digita. */
-  protected readonly results = toSignal(
-    this.searchControl.valueChanges.pipe(
-      map((value) => value.trim()),
-      debounceTime(SEARCH_DEBOUNCE_MS),
-      distinctUntilChanged(),
-      tap((term) => this.isSearching.set(term.length >= MIN_QUERY_LENGTH)),
-      switchMap((term) => {
-        if (term.length < MIN_QUERY_LENGTH) {
-          return of<MediaItem[]>([]);
-        }
-        return this.tmdb.search(term).pipe(
-          map((items) => items.slice(0, QUICK_RESULTS)),
-          // Un errore di rete non deve interrompere il flusso: senza questo
-          // catch l'Observable si completerebbe e la ricerca smetterebbe di
-          // rispondere per il resto della sessione.
-          catchError(() => of<MediaItem[]>([])),
-        );
-      }),
-      tap(() => this.isSearching.set(false)),
-    ),
-    { initialValue: [] as MediaItem[] },
+  /**
+   * Esito della ricerca, con il termine che l'ha prodotto.
+   *
+   * Termine e risultati viaggiano insieme perché il debounce li disallinea: la
+   * casella può già contenere una lettera in più rispetto a ciò che si vede nel
+   * carosello, e l'evidenziazione deve seguire i risultati, non la digitazione.
+   */
+  private readonly search$ = this.searchControl.valueChanges.pipe(
+    map((value) => value.trim()),
+    debounceTime(SEARCH_DEBOUNCE_MS),
+    distinctUntilChanged(),
+    tap((term) => this.isSearching.set(term.length >= MIN_QUERY_LENGTH)),
+    switchMap((term) => {
+      if (term.length < MIN_QUERY_LENGTH) {
+        return of({ term, items: [] as MediaItem[] });
+      }
+      return this.tmdb.search(term).pipe(
+        // TMDB ordina per popolarità: qui i titoli che iniziano davvero con il
+        // testo digitato passano davanti, e il carosello si affina da sé a ogni
+        // carattere aggiunto.
+        map((items) => ({ term, items: rankByRelevance(items, term).slice(0, CAROUSEL_RESULTS) })),
+        // Un errore di rete non deve interrompere il flusso: senza questo
+        // catch l'Observable si completerebbe e la ricerca smetterebbe di
+        // rispondere per il resto della sessione.
+        catchError(() => of({ term, items: [] as MediaItem[] })),
+      );
+    }),
+    tap(() => this.isSearching.set(false)),
   );
+
+  private readonly outcome = toSignal(this.search$, {
+    initialValue: { term: '', items: [] as MediaItem[] },
+  });
+
+  protected readonly results = computed(() => this.outcome().items);
+
+  /** Termine a cui si riferiscono i risultati attualmente mostrati. */
+  protected readonly activeTerm = computed(() => this.outcome().term);
 
   protected readonly hasQuery = computed(() => this.searchControl.value.trim().length > 0);
 
   protected readonly showResults = computed(
     () => this.isSearchOpen() && this.searchControl.value.trim().length >= MIN_QUERY_LENGTH,
   );
+
+  /** Quante schede fantasma mostrare mentre la richiesta è in corso. */
+  protected readonly skeletons = Array.from({ length: 8 }, (_, index) => index);
 
   /* ----------------------------------------------------------------------
      Ricerca
@@ -145,6 +164,11 @@ export class Header {
 
   protected resultTitle(item: MediaItem): string {
     return getMediaTitle(item);
+  }
+
+  /** Titolo spezzato per evidenziare la parte che coincide con la ricerca. */
+  protected titleParts(item: MediaItem): TitlePart[] {
+    return splitOnMatch(getMediaTitle(item), this.activeTerm());
   }
 
   protected posterUrl(item: MediaItem): string {

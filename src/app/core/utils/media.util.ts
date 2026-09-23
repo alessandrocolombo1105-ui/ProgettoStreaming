@@ -20,6 +20,17 @@ export function getMediaTitle(item: MediaItem | MediaDetails): string {
   return isMovie(item) ? item.title : item.name;
 }
 
+/**
+ * Titolo in lingua originale.
+ *
+ * Serve alla ricerca: TMDB trova "Guerre stellari" anche digitando "star",
+ * perché il match avviene sul titolo originale, che va quindi considerato
+ * insieme a quello tradotto.
+ */
+export function getOriginalTitle(item: MediaItem | MediaDetails): string {
+  return isMovie(item) ? item.original_title : item.original_name;
+}
+
 /** Data di uscita in formato `YYYY-MM-DD`, stringa vuota se assente. */
 export function getMediaDate(item: MediaItem | MediaDetails): string {
   return isMovie(item) ? item.release_date : item.first_air_date;
