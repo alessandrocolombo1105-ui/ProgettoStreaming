@@ -1,8 +1,3 @@
-<!--
-  L'immagine è un bottone a sé: i controlli rapidi vivono nel pannello sotto,
-  perché annidare bottoni dentro un bottone non è markup valido e li renderebbe
-  irraggiungibili da tastiera.
--->
 <button
   type="button"
   class="card__open"
@@ -11,7 +6,6 @@
 >
   <img class="card__image" [src]="imageUrl()" [alt]="title()" loading="lazy" decoding="async" />
 
-  <!-- Il fotogramma spesso non contiene il titolo: qui resta sempre leggibile. -->
   <span class="card__caption">{{ title() }}</span>
 </button>
 

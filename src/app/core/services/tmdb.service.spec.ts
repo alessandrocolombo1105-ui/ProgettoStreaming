@@ -24,7 +24,7 @@ describe('TmdbService', () => {
 
   afterEach(() => httpMock.verify());
 
-  it("allega chiave API e lingua a ogni richiesta", () => {
+  it('allega chiave API e lingua a ogni richiesta', () => {
     service.getPopularMovies().subscribe();
 
     const req = httpMock.expectOne((r) => r.url === `${base}/movie/popular`);
@@ -37,16 +37,18 @@ describe('TmdbService', () => {
     let received: unknown[] = [];
     service.getTrending().subscribe((items) => (received = items));
 
-    httpMock.expectOne((r) => r.url === `${base}/trending/all/day`).flush({
-      page: 1,
-      total_pages: 1,
-      total_results: 3,
-      results: [
-        { id: 1, media_type: 'movie', title: 'Film' },
-        { id: 2, media_type: 'person', name: 'Attore' },
-        { id: 3, media_type: 'tv', name: 'Serie' },
-      ],
-    });
+    httpMock
+      .expectOne((r) => r.url === `${base}/trending/all/day`)
+      .flush({
+        page: 1,
+        total_pages: 1,
+        total_results: 3,
+        results: [
+          { id: 1, media_type: 'movie', title: 'Film' },
+          { id: 2, media_type: 'person', name: 'Attore' },
+          { id: 3, media_type: 'tv', name: 'Serie' },
+        ],
+      });
 
     expect(received.length).toBe(2);
   });
@@ -65,15 +67,13 @@ describe('TmdbService', () => {
       .subscribe();
 
     const req = httpMock.expectOne((r) => r.url === `${base}/discover/tv`);
-    // `primary_release_date` non esiste su /discover/tv: inviarlo darebbe 400.
+
     expect(req.request.params.get('sort_by')).toBe('first_air_date.desc');
     req.flush({ page: 1, results: [], total_pages: 0, total_results: 0 });
   });
 
   it('applica anno e genere come parametri di discover', () => {
-    service
-      .getCatalog({ ...DEFAULT_FILTERS, genreId: 28, year: 2020, minRating: 7 })
-      .subscribe();
+    service.getCatalog({ ...DEFAULT_FILTERS, genreId: 28, year: 2020, minRating: 7 }).subscribe();
 
     const req = httpMock.expectOne((r) => r.url === `${base}/discover/movie`);
     expect(req.request.params.get('with_genres')).toBe('28');
@@ -88,15 +88,17 @@ describe('TmdbService', () => {
       .getCatalog({ ...DEFAULT_FILTERS, query: 'matrix', minRating: 7 })
       .subscribe((res) => (total = res.results.length));
 
-    httpMock.expectOne((r) => r.url === `${base}/search/movie`).flush({
-      page: 1,
-      total_pages: 1,
-      total_results: 2,
-      results: [
-        { id: 1, title: 'Buono', vote_average: 8.1, genre_ids: [] },
-        { id: 2, title: 'Scarso', vote_average: 4.2, genre_ids: [] },
-      ],
-    });
+    httpMock
+      .expectOne((r) => r.url === `${base}/search/movie`)
+      .flush({
+        page: 1,
+        total_pages: 1,
+        total_results: 2,
+        results: [
+          { id: 1, title: 'Buono', vote_average: 8.1, genre_ids: [] },
+          { id: 2, title: 'Scarso', vote_average: 4.2, genre_ids: [] },
+        ],
+      });
 
     expect(total).toBe(1);
   });

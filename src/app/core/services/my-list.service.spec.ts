@@ -57,7 +57,7 @@ describe('MyListService', () => {
 
   it('distingue film e serie con lo stesso id', () => {
     service.add(movie);
-    // Gli id TMDB si ripetono fra i due cataloghi: la chiave include il tipo.
+
     expect(service.isInList(movie.id, 'tv')).toBe(false);
   });
 

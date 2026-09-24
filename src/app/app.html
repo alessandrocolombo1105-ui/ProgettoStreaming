@@ -1,14 +1,10 @@
 @if (!isConfigured) {
-  <!--
-    Senza chiave API ogni chiamata a TMDB fallisce con 401: meglio spiegare
-    cosa manca che lasciare l'utente davanti a caroselli vuoti.
-  -->
   <div class="setup" role="alert">
     <app-icon name="alert" [size]="20" />
     <p>
       <strong>Chiave TMDB mancante.</strong>
-      Apri <code>src/environments/environment.ts</code> e sostituisci
-      <code>apiKey</code> con la tua API Key v3, poi riavvia il server di sviluppo.
+      Apri <code>src/environments/environment.ts</code> e sostituisci <code>apiKey</code> con la tua
+      API Key v3, poi riavvia il server di sviluppo.
     </p>
   </div>
 }
@@ -26,8 +22,8 @@
   </p>
   <p>
     Dati e immagini da
-    <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>.
-    Prodotto non approvato né certificato da TMDB. © {{ year }}
+    <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a>. Prodotto non
+    approvato né certificato da TMDB. © {{ year }}
   </p>
 </footer>
 

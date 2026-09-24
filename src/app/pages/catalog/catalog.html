@@ -86,7 +86,6 @@
     </div>
   </form>
 
-  <!-- Risultati -->
   @if (error(); as message) {
     <p class="catalog__error">
       <app-icon name="alert" [size]="18" />
@@ -113,7 +112,12 @@
 
     @if (canLoadMore()) {
       <div class="catalog__more">
-        <button type="button" class="catalog__more-btn" [disabled]="loadingMore()" (click)="loadMore()">
+        <button
+          type="button"
+          class="catalog__more-btn"
+          [disabled]="loadingMore()"
+          (click)="loadMore()"
+        >
           {{ loadingMore() ? 'Caricamento…' : 'Carica altri titoli' }}
         </button>
       </div>

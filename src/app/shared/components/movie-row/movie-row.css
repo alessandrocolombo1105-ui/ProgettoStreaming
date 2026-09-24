@@ -2,15 +2,12 @@
   display: block;
   position: relative;
   z-index: 1;
-  /* Larghezza delle schede, ereditata dalle card figlie. */
+
   --lx-card-w: 236px;
 }
-
 .row {
   position: relative;
 }
-
-/* Testata con titolo a sinistra e frecce a destra, sempre visibili. */
 .row__head {
   display: flex;
   align-items: center;
@@ -19,7 +16,6 @@
   padding-inline: var(--lx-gutter);
   margin-bottom: 14px;
 }
-
 .row__title {
   display: flex;
   align-items: center;
@@ -28,8 +24,6 @@
   font-weight: 700;
   letter-spacing: -0.015em;
 }
-
-/* Barretta a gradiente che apre il titolo di sezione. */
 .row__title::before {
   content: '';
   width: 3px;
@@ -37,12 +31,10 @@
   border-radius: 3px;
   background: var(--lx-accent-grad);
 }
-
 .row__nav {
   display: flex;
   gap: 7px;
 }
-
 .row__arrow {
   display: inline-flex;
   align-items: center;
@@ -60,19 +52,14 @@
     border-color var(--lx-dur) var(--lx-ease),
     opacity var(--lx-dur) var(--lx-ease);
 }
-
 .row__arrow:hover:not(:disabled) {
   background: var(--lx-glass-strong);
   border-color: var(--lx-cyan);
 }
-
-/* Le frecce restano al loro posto anche a fine corsa, per non far ballare la
-   testata: diventano solo inattive. */
 .row__arrow:disabled {
   opacity: 0.3;
   cursor: default;
 }
-
 .row__track {
   display: flex;
   gap: 14px;
@@ -80,33 +67,21 @@
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
-  /*
-    Un contenitore con overflow-x non può mostrare ciò che esce in verticale:
-    il padding inferiore riserva lo spazio al pannello della scheda espansa e
-    il margine negativo lo riassorbe, lasciando invariato il flusso di pagina.
-  */
+
   padding-block: 10px 160px;
   margin-bottom: -150px;
 }
-
 .row__track > * {
   scroll-snap-align: start;
 }
-
 .row__skeleton {
   flex: 0 0 auto;
   width: var(--lx-card-w);
   aspect-ratio: 16 / 9;
 }
-
 .row__skeleton.is-poster {
   aspect-ratio: 2 / 3;
 }
-
-/* --------------------------------------------------------------------------
-   Stati
-   -------------------------------------------------------------------------- */
-
 .row__error,
 .row__empty {
   display: flex;
@@ -116,7 +91,6 @@
   font-size: 0.85rem;
   color: var(--lx-text-dim);
 }
-
 .row__error {
   color: var(--lx-danger);
 }
@@ -131,18 +105,14 @@
   :host {
     --lx-card-w: 162px;
   }
-
   .row__title {
     font-size: 1.05rem;
   }
-
-  /* Senza pannello espanso su touch, lo spazio extra non serve più. */
   .row__track {
     padding-block: 8px;
     margin-bottom: 0;
     gap: 10px;
   }
-
   .row__nav {
     display: none;
   }

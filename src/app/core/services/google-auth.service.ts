@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
-/** Profilo estratto dall'ID token restituito da Google. */
 export interface GoogleProfile {
   sub: string;
   email: string;
@@ -9,7 +8,6 @@ export interface GoogleProfile {
   picture: string | null;
 }
 
-/** Parte dell'SDK Google Identity Services effettivamente usata qui. */
 interface GoogleIdentitySdk {
   accounts: {
     id: {
@@ -45,32 +43,13 @@ declare global {
 
 const GSI_SRC = 'https://accounts.google.com/gsi/client';
 
-/**
- * Integrazione con Google Identity Services.
- *
- * L'SDK viene caricato solo quando serve davvero — cioè quando l'utente apre
- * la pagina di accesso e un Client ID è configurato — invece di pesare su ogni
- * avvio dell'app.
- *
- * Limite noto: senza un backend la firma dell'ID token non può essere
- * verificata, quindi il profilo va trattato come attendibile solo quanto lo è
- * il browser. Per la produzione il token va inviato a un server che ne
- * controlli la firma contro le chiavi pubbliche di Google.
- */
 @Injectable({ providedIn: 'root' })
 export class GoogleAuthService {
-  /** `false` finché il Client ID resta il segnaposto in `environment.ts`. */
   readonly isConfigured =
     !!environment.google.clientId && !environment.google.clientId.startsWith('INSERISCI');
 
   private sdkPromise: Promise<GoogleIdentitySdk> | null = null;
 
-  /**
-   * Disegna il bottone ufficiale di Google dentro `container`.
-   *
-   * Il pulsante deve essere quello reso da Google: un bottone replicato a mano
-   * non aprirebbe il flusso di consenso e violerebbe le linee guida del brand.
-   */
   async renderButton(
     container: HTMLElement,
     onCredential: (profile: GoogleProfile) => void,
@@ -106,14 +85,12 @@ export class GoogleAuthService {
     });
   }
 
-  /** Impedisce il riaccesso automatico dopo un logout esplicito. */
   disableAutoSelect(): void {
     if (this.isConfigured && window.google) {
       window.google.accounts.id.disableAutoSelect();
     }
   }
 
-  /** Inserisce lo script di Google una sola volta e attende che sia pronto. */
   private loadSdk(): Promise<GoogleIdentitySdk> {
     if (this.sdkPromise) {
       return this.sdkPromise;
@@ -151,18 +128,10 @@ export class GoogleAuthService {
       }
     });
 
-    // Un fallimento non deve impedire un nuovo tentativo al clic successivo.
     this.sdkPromise.catch(() => (this.sdkPromise = null));
     return this.sdkPromise;
   }
 
-  /**
-   * Estrae il profilo dal payload dell'ID token.
-   *
-   * È una decodifica, non una verifica: il payload è Base64URL, non cifrato.
-   * Va bene per popolare l'interfaccia, mai per autorizzare un'operazione
-   * sensibile lato server.
-   */
   private decodeIdToken(jwt: string): GoogleProfile | null {
     try {
       const payload = jwt.split('.')[1];

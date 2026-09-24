@@ -2,13 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { AuthService, DEMO_ACCOUNTS } from './auth.service';
 import { GoogleAuthService } from './google-auth.service';
 
-/**
- * Costruisce un ID token con il payload indicato; la firma non serve qui.
- *
- * Il payload passa per `TextEncoder`: un JWT reale contiene byte UTF-8, e
- * usare `btoa` direttamente sulla stringa la codificherebbe in Latin-1,
- * producendo un token che nessun client saprebbe rileggere.
- */
 function fakeIdToken(claims: Record<string, string>): string {
   const encode = (value: object) => {
     const bytes = new TextEncoder().encode(JSON.stringify(value));
@@ -27,7 +20,6 @@ describe('GoogleAuthService', () => {
   });
 
   it('si dichiara non configurato finché il Client ID è il segnaposto', () => {
-    // Riflette il valore in environment.ts: configurato solo con un ID reale.
     expect(typeof service.isConfigured).toBe('boolean');
   });
 
@@ -36,7 +28,11 @@ describe('GoogleAuthService', () => {
       return;
     }
     await expect(
-      service.renderButton(document.createElement('div'), () => {}, () => {}),
+      service.renderButton(
+        document.createElement('div'),
+        () => {},
+        () => {},
+      ),
     ).rejects.toThrow('Google Client ID non configurato.');
   });
 
@@ -70,13 +66,13 @@ describe('AuthService — accesso Google', () => {
 
     const user = auth.user();
     expect(auth.isAuthenticated()).toBe(true);
-    // L'email viene normalizzata in minuscolo per evitare account duplicati.
+
     expect(user?.email).toBe('mario.rossi@gmail.com');
     expect(user?.provider).toBe('google');
     expect(user?.avatarUrl).toBe('https://example.com/foto.jpg');
   });
 
-  it('riusa lo stesso account se l\'email è già registrata', async () => {
+  it("riusa lo stesso account se l'email è già registrata", async () => {
     await new Promise<void>((resolve) => {
       auth
         .signUp({ email: 'sara@example.com', password: 'segreta', displayName: 'Sara' })
@@ -97,7 +93,6 @@ describe('AuthService — accesso Google', () => {
         .subscribe(() => resolve());
     });
 
-    // Stesso utente, non un doppione: cambia solo il provider usato per entrare.
     expect(auth.user()?.id).toBe(firstId);
     expect(auth.user()?.provider).toBe('google');
   });
@@ -112,14 +107,9 @@ describe('AuthService — accesso Google', () => {
     expect(auth.user()?.email).toBe(demo.email);
     expect(auth.user()?.displayName).toBe(demo.name);
   });
-
 });
 
 describe('GoogleAuthService — decodifica del token', () => {
-  /**
-   * `decodeIdToken` è privato in TypeScript ma esiste a runtime: chiamarlo per
-   * nome verifica il codice reale invece di una sua copia nel test.
-   */
   let decode: (jwt: string) => { name: string; email: string; picture: string | null } | null;
 
   beforeEach(() => {
@@ -137,7 +127,7 @@ describe('GoogleAuthService — decodifica del token', () => {
     expect(profile?.email).toBe('niccolo@example.com');
   });
 
-  it('ricade sulla parte locale dell\'email quando il nome manca', () => {
+  it("ricade sulla parte locale dell'email quando il nome manca", () => {
     const profile = decode(fakeIdToken({ sub: '1', email: 'solo.email@example.com' }));
     expect(profile?.name).toBe('solo.email');
   });

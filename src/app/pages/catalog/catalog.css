@@ -1,16 +1,14 @@
 .catalog {
   position: relative;
   z-index: 1;
-  /* Lascia spazio alla navbar flottante, che non occupa flusso. */
+
   padding: calc(var(--lx-header-h) + 30px) var(--lx-gutter) 90px;
 }
-
 .catalog__title {
   font-size: clamp(2rem, 4vw, 3.1rem);
   font-weight: 800;
   letter-spacing: -0.035em;
 }
-
 .catalog__sub {
   margin-top: 8px;
   max-width: 46ch;
@@ -18,11 +16,6 @@
   font-size: 0.98rem;
   line-height: 1.55;
 }
-
-/* --------------------------------------------------------------------------
-   Filtri
-   -------------------------------------------------------------------------- */
-
 .filters {
   margin: 30px 0 34px;
   padding: 20px;
@@ -32,7 +25,6 @@
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
 }
-
 .filters__search {
   display: flex;
   align-items: center;
@@ -44,13 +36,11 @@
   color: var(--lx-text-dim);
   transition: border-color var(--lx-dur) var(--lx-ease);
 }
-
 .filters__search:focus-within {
   border-color: var(--lx-violet);
   color: var(--lx-text);
   box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.16);
 }
-
 .filters__search input {
   flex: 1;
   min-width: 0;
@@ -60,25 +50,21 @@
   font-size: 0.98rem;
   outline: none;
 }
-
 .filters__search input::-webkit-search-cancel-button {
   filter: invert(1);
   opacity: 0.45;
 }
-
 .filters__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
   gap: 16px;
   margin-top: 18px;
 }
-
 .field {
   display: flex;
   flex-direction: column;
   gap: 7px;
 }
-
 .field__label {
   display: flex;
   align-items: center;
@@ -90,7 +76,6 @@
   text-transform: uppercase;
   color: var(--lx-text-dim);
 }
-
 .field__value {
   padding: 1px 9px;
   border-radius: var(--lx-radius-pill);
@@ -99,7 +84,6 @@
   font-size: 0.75rem;
   font-weight: 800;
 }
-
 .field select {
   padding: 11px 13px;
   border-radius: var(--lx-radius);
@@ -110,24 +94,18 @@
   cursor: pointer;
   transition: border-color var(--lx-dur) var(--lx-ease);
 }
-
 .field select:hover {
   border-color: var(--lx-border-strong);
 }
-
-/* Gli <option> ereditano il tema di sistema su Windows: forzandone i colori
-   restano leggibili anche nel menu a tendina nativo. */
 .field select option {
   background: var(--lx-surface);
   color: var(--lx-text);
 }
-
 .field--range input[type='range'] {
   width: 100%;
   accent-color: var(--lx-violet);
   cursor: pointer;
 }
-
 .filters__foot {
   display: flex;
   flex-wrap: wrap;
@@ -138,14 +116,12 @@
   padding-top: 16px;
   border-top: 1px solid var(--lx-border);
 }
-
 .filters__count {
   font-size: 0.86rem;
   color: var(--lx-text-muted);
-  /* Riserva l'altezza della riga anche mentre il conteggio è nascosto. */
+
   min-height: 1.2em;
 }
-
 .filters__reset {
   display: inline-flex;
   align-items: center;
@@ -161,29 +137,21 @@
     border-color var(--lx-dur) var(--lx-ease),
     background var(--lx-dur) var(--lx-ease);
 }
-
 .filters__reset:hover {
   color: var(--lx-text);
   border-color: var(--lx-border-strong);
   background: var(--lx-glass);
 }
-
-/* --------------------------------------------------------------------------
-   Griglia risultati
-   -------------------------------------------------------------------------- */
-
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
   gap: 18px;
-  /* Le schede riempiono la cella invece di tenere la larghezza del carosello. */
+
   --lx-card-w: 100%;
 }
-
 .grid__skeleton {
   aspect-ratio: 2 / 3;
 }
-
 .catalog__error,
 .catalog__empty {
   display: flex;
@@ -194,19 +162,16 @@
   text-align: center;
   color: var(--lx-text-dim);
 }
-
 .catalog__error {
   flex-direction: row;
   justify-content: center;
   color: var(--lx-danger);
 }
-
 .catalog__more {
   display: flex;
   justify-content: center;
   margin-top: 38px;
 }
-
 .catalog__more-btn {
   padding: 13px 38px;
   border-radius: var(--lx-radius-pill);
@@ -219,12 +184,10 @@
     background var(--lx-dur) var(--lx-ease),
     border-color var(--lx-dur) var(--lx-ease);
 }
-
 .catalog__more-btn:hover:not(:disabled) {
   background: var(--lx-glass-strong);
   border-color: var(--lx-violet);
 }
-
 .catalog__more-btn:disabled {
   opacity: 0.6;
   cursor: progress;
@@ -235,7 +198,6 @@
     grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
     gap: 12px;
   }
-
   .filters {
     padding: 15px;
   }

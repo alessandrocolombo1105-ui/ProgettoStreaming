@@ -9,8 +9,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,
-      // I parametri di rotta arrivano ai componenti come input: il catalogo
-      // legge così i filtri dalla URL senza sottoscrivere ActivatedRoute.
       withComponentInputBinding(),
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' }),
     ),

@@ -1,7 +1,6 @@
 import { Movie } from '../models';
 import { rankByRelevance, splitOnMatch } from './search.util';
 
-/** Film minimo: al ranking servono titolo, titolo originale e popolarità. */
 function movie(title: string, popularity = 1, originalTitle = title): Movie {
   return {
     id: title.length * 1000 + popularity,
@@ -27,8 +26,6 @@ describe('rankByRelevance', () => {
       'sta',
     );
 
-    // "Lo Squalo" contiene "s" ma non inizia con "sta": scende in fondo,
-    // nonostante sia il più popolare dei tre.
     expect(titles(ranked)).toEqual(['Star Wars', 'Starship Troopers', 'Lo Squalo']);
   });
 
@@ -37,7 +34,7 @@ describe('rankByRelevance', () => {
     expect(titles(ranked)).toEqual(['Matrix', 'Matrix Reloaded']);
   });
 
-  it('premia l\'inizio di una parola rispetto a una corrispondenza interna', () => {
+  it("premia l'inizio di una parola rispetto a una corrispondenza interna", () => {
     const ranked = rankByRelevance([movie('Trasguerra', 99), movie('Star: Guerre', 1)], 'guerre');
     expect(titles(ranked)).toEqual(['Star: Guerre', 'Trasguerra']);
   });
@@ -51,19 +48,14 @@ describe('rankByRelevance', () => {
     const pool = [movie('Il Padrino', 50), movie('Il Pianista', 40), movie('Il Piccolo Lord', 30)];
 
     expect(titles(rankByRelevance(pool, 'il p'))[0]).toBe('Il Padrino');
-    // Con due lettere in più resta un solo candidato in testa alla fascia.
+
     expect(titles(rankByRelevance(pool, 'il pi'))[0]).toBe('Il Pianista');
     expect(titles(rankByRelevance(pool, 'il pic'))[0]).toBe('Il Piccolo Lord');
   });
 
   it('riconosce il titolo originale, non solo quello tradotto', () => {
     const ranked = rankByRelevance(
-      [
-        movie('La guerra dei mondi', 90),
-        // È il titolo italiano di Star Wars: cercando "star w" deve risalire,
-        // anche se il titolo tradotto non contiene quelle lettere.
-        movie('Guerre stellari', 10, 'Star Wars'),
-      ],
+      [movie('La guerra dei mondi', 90), movie('Guerre stellari', 10, 'Star Wars')],
       'star w',
     );
 
@@ -99,12 +91,12 @@ describe('splitOnMatch', () => {
 
   it('evidenzia ignorando gli accenti, senza alterare il testo mostrato', () => {
     const parts = splitOnMatch('Amélie', 'amel');
-    // Il segmento evidenziato conserva l'accento del titolo originale.
+
     expect(parts[0]).toEqual({ text: 'Amél', match: true });
     expect(parts.map((p) => p.text).join('')).toBe('Amélie');
   });
 
-  it('lascia il titolo intero quando non c\'è corrispondenza', () => {
+  it("lascia il titolo intero quando non c'è corrispondenza", () => {
     expect(splitOnMatch('Matrix', 'zzz')).toEqual([{ text: 'Matrix', match: false }]);
     expect(splitOnMatch('Matrix', '')).toEqual([{ text: 'Matrix', match: false }]);
   });

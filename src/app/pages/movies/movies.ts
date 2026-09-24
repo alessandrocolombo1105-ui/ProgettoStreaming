@@ -5,7 +5,6 @@ import { asyncState } from '../../core/utils/async-state';
 import { HeroBanner } from '../../shared/components/hero-banner/hero-banner';
 import { MovieRow } from '../../shared/components/movie-row/movie-row';
 
-/** Generi TMDB delle righe tematiche di questa pagina. */
 const GENRES = {
   azione: 28,
   avventura: 12,
@@ -15,7 +14,6 @@ const GENRES = {
   romantico: 10749,
 } as const;
 
-/** Sezione dedicata ai soli film, con banner e caroselli per genere. */
 @Component({
   selector: 'app-movies',
   imports: [HeroBanner, MovieRow],
@@ -54,7 +52,6 @@ export class Movies {
     [],
   );
 
-  /** Film in evidenza: il primo fra quelli al cinema con un backdrop usabile. */
   protected readonly featured = computed<MediaItem | null>(() => {
     const items = this.nowPlaying().data;
     return items.find((item) => !!item.backdrop_path && !!item.overview) ?? items[0] ?? null;

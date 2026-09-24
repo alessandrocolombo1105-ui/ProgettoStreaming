@@ -16,11 +16,9 @@ import {
   isDisplayableMedia,
 } from '../models';
 
-/** Dimensioni delle immagini servite dalla CDN di TMDB. */
 export type PosterSize = 'w185' | 'w342' | 'w500' | 'original';
 export type BackdropSize = 'w300' | 'w780' | 'w1280' | 'original';
 
-/** Placeholder SVG inline usato quando TMDB non ha immagini per un titolo. */
 const IMAGE_FALLBACK =
   'data:image/svg+xml;charset=UTF-8,' +
   encodeURIComponent(
@@ -31,30 +29,16 @@ const IMAGE_FALLBACK =
     </svg>`,
   );
 
-/**
- * Unico punto di accesso a TMDB API v3.
- *
- * Il servizio espone Observable "grezzi": chiave API, lingua e normalizzazione
- * degli errori sono responsabilità di `tmdbInterceptor`, mentre la gestione
- * dello stato reattivo resta ai componenti che consumano questi flussi.
- */
 @Injectable({ providedIn: 'root' })
 export class TmdbService {
   private readonly http = inject(HttpClient);
   private readonly base = environment.tmdb.baseUrl;
 
-  /** Cache dei generi: l'elenco cambia raramente e serve a ogni schermata. */
   private readonly genreCache = new Map<MediaType, Observable<Genre[]>>();
 
-  /** `false` finché la chiave TMDB non viene inserita in `environment.ts`. */
   readonly isConfigured =
     !!environment.tmdb.apiKey && !environment.tmdb.apiKey.startsWith('INSERISCI');
 
-  /* ----------------------------------------------------------------------
-     Liste
-     ---------------------------------------------------------------------- */
-
-  /** Film e serie di tendenza della giornata, senza le persone. */
   getTrending(window: 'day' | 'week' = 'day'): Observable<MediaItem[]> {
     return this.http
       .get<TmdbResponse<TmdbSearchResult>>(`${this.base}/trending/all/${window}`)
@@ -69,7 +53,6 @@ export class TmdbService {
     return this.list('/movie/top_rated', { page });
   }
 
-  /** In arrivo al cinema; `region` limita il calendario al mercato italiano. */
   getUpcomingMovies(page = 1): Observable<MediaItem[]> {
     return this.list('/movie/upcoming', { page, region: environment.tmdb.region });
   }
@@ -86,12 +69,10 @@ export class TmdbService {
     return this.list('/tv/top_rated', { page });
   }
 
-  /** Serie in onda questa settimana. */
   getOnTheAirTv(page = 1): Observable<MediaItem[]> {
     return this.list('/tv/on_the_air', { page });
   }
 
-  /** Contenuti di un singolo genere, ordinati per popolarità. */
   getByGenre(mediaType: MediaType, genreId: number, page = 1): Observable<MediaItem[]> {
     return this.list(`/discover/${mediaType}`, {
       page,
@@ -101,21 +82,10 @@ export class TmdbService {
     });
   }
 
-  /** Titoli simili a quello indicato, usati in coda alla modale dettagli. */
   getSimilar(mediaType: MediaType, id: number): Observable<MediaItem[]> {
     return this.list(`/${mediaType}/${id}/similar`, {});
   }
 
-  /* ----------------------------------------------------------------------
-     Dettaglio
-     ---------------------------------------------------------------------- */
-
-  /**
-   * Dettaglio completo con video e cast in una sola chiamata.
-   *
-   * `include_video_language` recupera anche i trailer inglesi: molti titoli non
-   * hanno video localizzati e senza questo parametro il player resterebbe vuoto.
-   */
   getDetails(mediaType: MediaType, id: number): Observable<MediaDetails> {
     const params = this.toParams({
       append_to_response: 'videos,credits,similar',
@@ -132,14 +102,6 @@ export class TmdbService {
     return this.getDetails('tv', id) as Observable<TvDetails>;
   }
 
-  /* ----------------------------------------------------------------------
-     Ricerca e catalogo
-     ---------------------------------------------------------------------- */
-
-  /**
-   * Ricerca per parola chiave su film e serie.
-   * Restituisce una lista vuota per query vuote, senza contattare TMDB.
-   */
   search(query: string, page = 1): Observable<MediaItem[]> {
     const term = query.trim();
     if (!term) {
@@ -152,11 +114,6 @@ export class TmdbService {
       .pipe(map((res) => res.results.filter(isDisplayableMedia)));
   }
 
-  /**
-   * Catalogo filtrato. Con una query attiva si passa da `/discover` a
-   * `/search`, che ignora i filtri: in quel caso genere, anno e voto minimo
-   * vengono applicati lato client sui risultati ricevuti.
-   */
   getCatalog(filters: CatalogFilters): Observable<TmdbResponse<MediaItem>> {
     const term = filters.query.trim();
 
@@ -182,8 +139,6 @@ export class TmdbService {
       page: filters.page,
       sort_by: this.resolveSort(filters.sortBy, filters.mediaType),
       include_adult: false,
-      // Senza una soglia di voti l'ordinamento per rating restituisce titoli
-      // sconosciuti con pochissime valutazioni.
       'vote_count.gte': filters.sortBy === 'vote_average.desc' ? 300 : 50,
     };
 
@@ -203,27 +158,20 @@ export class TmdbService {
     });
   }
 
-  /** Elenco generi, memorizzato per tipo di contenuto. */
   getGenres(mediaType: MediaType): Observable<Genre[]> {
     const cached = this.genreCache.get(mediaType);
     if (cached) {
       return cached;
     }
 
-    const request = this.http
-      .get<{ genres: Genre[] }>(`${this.base}/genre/${mediaType}/list`)
-      .pipe(
-        map((res) => res.genres),
-        shareReplay({ bufferSize: 1, refCount: false }),
-      );
+    const request = this.http.get<{ genres: Genre[] }>(`${this.base}/genre/${mediaType}/list`).pipe(
+      map((res) => res.genres),
+      shareReplay({ bufferSize: 1, refCount: false }),
+    );
 
     this.genreCache.set(mediaType, request);
     return request;
   }
-
-  /* ----------------------------------------------------------------------
-     Immagini
-     ---------------------------------------------------------------------- */
 
   posterUrl(path: string | null | undefined, size: PosterSize = 'w342'): string {
     return path ? `${environment.tmdb.imageBaseUrl}/${size}${path}` : IMAGE_FALLBACK;
@@ -233,20 +181,12 @@ export class TmdbService {
     return path ? `${environment.tmdb.imageBaseUrl}/${size}${path}` : IMAGE_FALLBACK;
   }
 
-  /* ----------------------------------------------------------------------
-     Interni
-     ---------------------------------------------------------------------- */
-
   private list(path: string, params: Record<string, string | number | boolean>) {
     return this.http
       .get<TmdbResponse<MediaItem>>(`${this.base}${path}`, { params: this.toParams(params) })
       .pipe(map((res) => res.results));
   }
 
-  /**
-   * I campi di ordinamento di `/discover/tv` hanno nomi diversi da quelli dei
-   * film: usare i valori dei film su una serie restituisce un errore 400.
-   */
   private resolveSort(sortBy: SortOption, mediaType: MediaType): string {
     if (mediaType === 'movie') {
       return sortBy;
@@ -257,7 +197,6 @@ export class TmdbService {
       case 'title.asc':
         return 'name.asc';
       case 'revenue.desc':
-        // Gli incassi non esistono per le serie: si ripiega sulla popolarità.
         return 'popularity.desc';
       default:
         return sortBy;

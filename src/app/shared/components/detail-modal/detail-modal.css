@@ -9,12 +9,10 @@
   overflow: hidden auto;
   box-shadow: var(--lx-shadow-lg);
 }
-
 .modal::backdrop {
   background: rgba(5, 8, 20, 0.72);
   backdrop-filter: blur(6px);
 }
-
 .modal[open] {
   animation: modal-in 240ms var(--lx-ease);
 }
@@ -29,11 +27,9 @@
     transform: none;
   }
 }
-
 .modal__panel {
   position: relative;
 }
-
 .modal__close {
   position: absolute;
   top: 16px;
@@ -54,22 +50,15 @@
     background var(--lx-dur) var(--lx-ease),
     border-color var(--lx-dur) var(--lx-ease);
 }
-
 .modal__close:hover {
   background: var(--lx-surface-3);
   border-color: var(--lx-border-strong);
 }
-
-/* --------------------------------------------------------------------------
-   Testata
-   -------------------------------------------------------------------------- */
-
 .modal__hero {
   position: relative;
   aspect-ratio: 16 / 9;
   background: #05070f;
 }
-
 .modal__player,
 .modal__backdrop {
   width: 100%;
@@ -77,11 +66,9 @@
   border: 0;
   display: block;
 }
-
 .modal__backdrop {
   object-fit: cover;
 }
-
 .modal__scrim {
   position: absolute;
   inset: 0;
@@ -92,20 +79,17 @@
     transparent 82%
   );
 }
-
 .modal__hero-content {
   position: absolute;
   inset: auto 0 0 0;
   padding: 0 40px 26px;
 }
-
 .modal__title {
   font-size: clamp(1.6rem, 3.2vw, 2.5rem);
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: -0.03em;
 }
-
 .modal__actions {
   display: flex;
   flex-wrap: wrap;
@@ -113,7 +97,6 @@
   gap: 10px;
   margin-top: 18px;
 }
-
 .modal__btn {
   display: inline-flex;
   align-items: center;
@@ -128,18 +111,15 @@
     background var(--lx-dur) var(--lx-ease),
     border-color var(--lx-dur) var(--lx-ease);
 }
-
 .modal__btn--play {
   background: var(--lx-accent-grad);
   color: #0b1020;
   font-weight: 700;
   box-shadow: 0 10px 30px rgba(124, 92, 255, 0.4);
 }
-
 .modal__btn--play:hover {
   filter: brightness(1.12);
 }
-
 .modal__btn--round {
   width: 44px;
   height: 44px;
@@ -150,47 +130,35 @@
   background: var(--lx-glass);
   color: var(--lx-text);
 }
-
 .modal__btn--round:hover {
   border-color: var(--lx-cyan);
   background: var(--lx-glass-strong);
 }
-
 .modal__btn--round.is-saved {
   border-color: var(--lx-success);
   color: var(--lx-success);
 }
-
 .modal__btn--ghost {
   background: var(--lx-glass);
   border-color: var(--lx-border);
   color: var(--lx-text);
 }
-
 .modal__btn--ghost:hover {
   background: var(--lx-glass-strong);
   border-color: var(--lx-border-strong);
 }
-
 .modal__no-trailer {
   font-size: 0.87rem;
   color: var(--lx-text-dim);
 }
-
-/* --------------------------------------------------------------------------
-   Corpo
-   -------------------------------------------------------------------------- */
-
 .modal__body {
   padding: 26px 40px 38px;
 }
-
 .modal__columns {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 34px;
 }
-
 .modal__meta {
   display: flex;
   flex-wrap: wrap;
@@ -199,7 +167,6 @@
   font-size: 0.86rem;
   color: var(--lx-text-muted);
 }
-
 .modal__match {
   padding: 4px 11px;
   border-radius: var(--lx-radius-pill);
@@ -208,7 +175,6 @@
   color: var(--lx-cyan);
   font-weight: 700;
 }
-
 .modal__rating {
   display: inline-flex;
   align-items: center;
@@ -216,40 +182,32 @@
   color: var(--lx-warn);
   font-weight: 600;
 }
-
 .modal__tagline {
   margin-top: 15px;
   font-size: 1rem;
   font-style: italic;
   color: var(--lx-text-muted);
 }
-
 .modal__overview {
   margin-top: 14px;
   font-size: 1rem;
   line-height: 1.65;
 }
-
 .modal__aside {
   font-size: 0.85rem;
 }
-
 .modal__field {
   margin-bottom: 13px;
   color: var(--lx-text);
   line-height: 1.55;
 }
-
 .modal__label {
   color: var(--lx-text-dim);
   margin-right: 6px;
 }
-
-/* Elenchi separati da virgola senza doverle scrivere nel template. */
 .modal__person + .modal__person::before {
   content: ', ';
 }
-
 .modal__error {
   display: flex;
   align-items: center;
@@ -257,37 +215,28 @@
   color: var(--lx-danger);
   font-size: 0.92rem;
 }
-
 .modal__skeleton {
   height: 15px;
   margin-bottom: 12px;
 }
-
 .modal__skeleton--short {
   width: 60%;
 }
-
-/* --------------------------------------------------------------------------
-   Titoli simili
-   -------------------------------------------------------------------------- */
-
 .modal__similar {
   margin-top: 36px;
   padding-top: 26px;
   border-top: 1px solid var(--lx-border);
 }
-
 .modal__section-title {
   margin-bottom: 15px;
   font-size: 1.15rem;
   font-weight: 700;
 }
-
 .modal__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 13px;
-  /* Le schede riempiono la cella invece di tenere la larghezza del carosello. */
+
   --lx-card-w: 100%;
 }
 
@@ -295,16 +244,13 @@
   .modal__hero-content {
     padding: 0 20px 18px;
   }
-
   .modal__body {
     padding: 20px 20px 30px;
   }
-
   .modal__columns {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-
   .modal__grid {
     grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
   }

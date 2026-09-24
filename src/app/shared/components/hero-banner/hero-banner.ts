@@ -13,15 +13,8 @@ import {
 } from '../../../core/utils/media.util';
 import { Icon } from '../icon/icon';
 
-/** Oltre questa lunghezza la sinossi viene troncata per non invadere il banner. */
 const OVERVIEW_MAX_CHARS = 280;
 
-/**
- * Banner del titolo in evidenza, con backdrop a piena larghezza.
- *
- * Mostra uno scheletro finché il contenuto non è disponibile invece di
- * collassare: il salto di layout sarebbe lungo quanto la viewport.
- */
 @Component({
   selector: 'app-hero-banner',
   imports: [Icon],
@@ -76,7 +69,6 @@ export class HeroBanner {
     return resolveMediaType(item) === 'movie' ? 'Film' : 'Serie TV';
   });
 
-  /** Sinossi troncata all'ultimo spazio utile, per non tagliare una parola. */
   protected readonly overview = computed(() => {
     const text = this.media()?.overview?.trim() ?? '';
     if (text.length <= OVERVIEW_MAX_CHARS) {

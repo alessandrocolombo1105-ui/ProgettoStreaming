@@ -23,8 +23,6 @@ describe('Home', () => {
   });
 
   it('richiede i contenuti di tutti i caroselli in parallelo', () => {
-    // Nove righe più il banner condividono i trending: le richieste partono
-    // tutte all'inizializzazione, senza attendersi a vicenda.
     const requests = httpMock.match((req) => req.url.includes('api.themoviedb.org'));
     expect(requests.length).toBeGreaterThan(1);
   });

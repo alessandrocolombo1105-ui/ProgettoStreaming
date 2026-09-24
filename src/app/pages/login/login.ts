@@ -17,17 +17,8 @@ import { AuthService, DEMO_ACCOUNTS, DemoAccount } from '../../core/services/aut
 import { GoogleAuthService, GoogleProfile } from '../../core/services/google-auth.service';
 import { Icon } from '../../shared/components/icon/icon';
 
-/** Modalità del riquadro: accesso a un account esistente o registrazione. */
 type Mode = 'signin' | 'signup';
 
-/**
- * Accesso e registrazione.
- *
- * L'accesso con Google usa il pulsante ufficiale di Google Identity Services
- * quando è configurato un Client ID. In sua assenza resta disponibile un
- * selettore di account fittizi, dichiarato come simulazione: non imita la
- * schermata di Google e non chiede mai credenziali reali.
- */
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule, Icon],
@@ -40,17 +31,14 @@ export class Login {
   private readonly google = inject(GoogleAuthService);
   private readonly router = inject(Router);
 
-  /** Contenitore in cui Google disegna il proprio pulsante. */
   private readonly googleSlot = viewChild<ElementRef<HTMLElement>>('googleSlot');
 
-  /** Indirizzo a cui tornare dopo l'accesso, fornito dalla guardia. */
   readonly returnUrl = input('/');
 
   protected readonly mode = signal<Mode>('signin');
   protected readonly submitting = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
 
-  /** Vero quando c'è un Client ID: determina quale dei due percorsi mostrare. */
   protected readonly googleReady = this.google.isConfigured;
   protected readonly demoAccounts = DEMO_ACCOUNTS;
   protected readonly showDemoPicker = signal(false);
@@ -68,12 +56,12 @@ export class Login {
   });
 
   protected readonly isSignUp = computed(() => this.mode() === 'signup');
-  protected readonly title = computed(() => (this.isSignUp() ? 'Crea il tuo account' : 'Bentornato'));
+  protected readonly title = computed(() =>
+    this.isSignUp() ? 'Crea il tuo account' : 'Bentornato',
+  );
   protected readonly submitLabel = computed(() => (this.isSignUp() ? 'Registrati' : 'Accedi'));
 
   constructor() {
-    // Il pulsante di Google va disegnato dall'SDK dentro un contenitore reale,
-    // quindi solo dopo che il template lo ha reso disponibile.
     effect(() => {
       const slot = this.googleSlot()?.nativeElement;
       if (!slot || !this.googleReady) {
@@ -114,10 +102,6 @@ export class Login {
     );
   }
 
-  /* ----------------------------------------------------------------------
-     Google
-     ---------------------------------------------------------------------- */
-
   private onGoogleProfile(profile: GoogleProfile): void {
     this.run(this.auth.signInWithGoogleProfile(profile));
   }
@@ -142,11 +126,6 @@ export class Login {
       .toUpperCase();
   }
 
-  /* ----------------------------------------------------------------------
-     Interni
-     ---------------------------------------------------------------------- */
-
-  /** Esegue la richiesta gestendo caricamento, errore e navigazione finale. */
   private run(request$: Observable<AuthSession>): void {
     this.submitting.set(true);
     this.errorMessage.set(null);
@@ -163,7 +142,6 @@ export class Login {
     });
   }
 
-  /** Vero quando il campo è stato toccato ed è in errore: evita avvisi precoci. */
   protected showError(control: 'email' | 'password'): boolean {
     const field = this.form.controls[control];
     return field.invalid && (field.touched || field.dirty);

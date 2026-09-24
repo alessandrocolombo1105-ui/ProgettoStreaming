@@ -2,11 +2,6 @@
   <div class="row__head">
     <h2 class="row__title">{{ title() }}</h2>
 
-    <!--
-      Le frecce vivono nella testata e restano sempre presenti, disabilitate a
-      fine corsa: comparire e sparire al passaggio del mouse le renderebbe
-      inutilizzabili da tastiera e farebbe saltare il layout.
-    -->
     @if (hasItems()) {
       <div class="row__nav">
         <button
@@ -31,11 +26,6 @@
     }
   </div>
 
-  <!--
-    `scroll` aggiorna solo due signal booleani: è abbastanza leggero da non
-    richiedere throttling, e in zoneless Angular non rirenderizza se i valori
-    non cambiano davvero.
-  -->
   <div #track class="row__track lx-scroll-hidden" (scroll)="onScroll()">
     @if (loading()) {
       @for (item of skeletons; track item) {

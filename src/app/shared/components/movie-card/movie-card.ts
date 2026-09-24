@@ -21,14 +21,6 @@ import {
 } from '../../../core/utils/media.util';
 import { Icon } from '../icon/icon';
 
-/**
- * Scheda di un contenuto, con pannello dettagli che compare al passaggio del
- * mouse o quando il focus da tastiera entra nella scheda.
- *
- * Il pannello viene montato solo quando serve (`@if`): con decine di schede per
- * pagina, tenerne sempre il markup nel DOM peserebbe sul primo rendering senza
- * che l'utente ne veda mai la maggior parte.
- */
 @Component({
   selector: 'app-movie-card',
   imports: [Icon],
@@ -53,17 +45,11 @@ export class MovieCard {
   private readonly genres = inject(GenreStore);
 
   readonly media = input.required<MediaItem>();
-  /** Locandina verticale (2:3) invece del fotogramma orizzontale (16:9). */
+
   readonly posterLayout = input(false);
 
-  /**
-   * Abilita il pannello dettagli in hover. Va spento dentro contenitori che
-   * ritagliano l'overflow — come la modale — dove il pannello resterebbe
-   * comunque invisibile.
-   */
   readonly interactive = input(true);
 
-  /** Vero mentre il puntatore o il focus da tastiera insistono sulla scheda. */
   protected readonly isActive = signal(false);
 
   protected readonly title = computed(() => getMediaTitle(this.media()));
@@ -77,7 +63,6 @@ export class MovieCard {
       : this.tmdb.backdropUrl(this.media().backdrop_path, 'w300'),
   );
 
-  /** Percentuale di gradimento; `null` quando il titolo non ha ancora voti. */
   protected readonly match = computed(() => {
     const item = this.media();
     return item.vote_count > 0 ? getMatchPercentage(item.vote_average) : null;
@@ -103,11 +88,6 @@ export class MovieCard {
     this.isActive.set(false);
   }
 
-  /**
-   * Il pannello resta aperto finché il focus si sposta fra i suoi stessi
-   * bottoni: chiuderlo a ogni `focusout` smonterebbe l'elemento che sta per
-   * ricevere il focus, facendolo perdere del tutto.
-   */
   protected onFocusOut(event: FocusEvent): void {
     const next = event.relatedTarget as Node | null;
     if (!next || !this.host.nativeElement.contains(next)) {
@@ -123,10 +103,6 @@ export class MovieCard {
     this.modal.open(this.media(), { autoplay: true });
   }
 
-  /**
-   * Aggiunge o toglie il titolo dalla lista. Senza sessione attiva apre la
-   * modale, da cui l'utente viene indirizzato al login con un messaggio chiaro.
-   */
   protected toggleList(): void {
     if (!this.isAuthenticated()) {
       this.openDetails();

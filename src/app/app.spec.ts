@@ -9,7 +9,6 @@ describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      // Il guscio monta header e modale, che iniettano HttpClient e Router.
       providers: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
   });
@@ -36,8 +35,6 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const notice = compiled.querySelector('.setup');
 
-    // L'avviso dipende dal valore in environment.ts: è presente finché la
-    // chiave resta il segnaposto, e sparisce quando ne viene inserita una vera.
     if (notice) {
       expect(notice.textContent).toContain('Chiave TMDB mancante');
     } else {

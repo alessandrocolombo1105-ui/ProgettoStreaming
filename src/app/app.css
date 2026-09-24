@@ -2,11 +2,6 @@
   display: block;
   min-height: 100vh;
 }
-
-/*
-  Ancorato in fondo alla finestra: in cima finirebbe sotto la navbar flottante,
-  e spostare la navbar per farvi spazio sfalserebbe l'aggancio dell'hero.
-*/
 .setup {
   position: fixed;
   inset: auto 0 0 0;
@@ -23,22 +18,18 @@
   font-size: 0.87rem;
   line-height: 1.5;
 }
-
 .setup code {
   padding: 1px 6px;
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.4);
   font-size: 0.88em;
 }
-
-/* Il contenuto resta sopra l'aurora disegnata su body::before. */
 .shell {
   position: relative;
   z-index: 1;
   display: block;
   min-height: 60vh;
 }
-
 .footer {
   position: relative;
   z-index: 1;
@@ -54,7 +45,6 @@
   font-size: 0.82rem;
   line-height: 1.6;
 }
-
 .footer__brand {
   display: flex;
   align-items: center;
@@ -63,7 +53,6 @@
   letter-spacing: 0.18em;
   color: var(--lx-text-muted);
 }
-
 .footer__mark {
   width: 11px;
   height: 11px;
@@ -71,13 +60,11 @@
   background: var(--lx-accent-grad);
   transform: rotate(45deg);
 }
-
 .footer a {
   color: var(--lx-text-muted);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-
 .footer a:hover {
   color: var(--lx-cyan);
 }

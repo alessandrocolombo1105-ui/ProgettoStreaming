@@ -4,23 +4,16 @@
   padding: calc(var(--lx-header-h) + 30px) var(--lx-gutter) 90px;
   min-height: 100vh;
 }
-
 .page__title {
   font-size: clamp(2rem, 4vw, 3.1rem);
   font-weight: 800;
   letter-spacing: -0.035em;
 }
-
 .page__sub {
   margin-top: 8px;
   color: var(--lx-text-muted);
   font-size: 0.98rem;
 }
-
-/* --------------------------------------------------------------------------
-   Griglia
-   -------------------------------------------------------------------------- */
-
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
@@ -29,11 +22,9 @@
   padding: 0;
   list-style: none;
 }
-
 .tile {
   position: relative;
 }
-
 .tile__open {
   display: block;
   width: 100%;
@@ -47,19 +38,18 @@
     border-color var(--lx-dur) var(--lx-ease),
     box-shadow var(--lx-dur) var(--lx-ease);
 }
-
 .tile__open:hover {
   transform: translateY(-5px);
   border-color: rgba(124, 92, 255, 0.6);
-  box-shadow: 0 18px 44px rgba(5, 8, 20, 0.7), 0 8px 30px rgba(124, 92, 255, 0.26);
+  box-shadow:
+    0 18px 44px rgba(5, 8, 20, 0.7),
+    0 8px 30px rgba(124, 92, 255, 0.26);
 }
-
 .tile__poster {
   width: 100%;
   aspect-ratio: 2 / 3;
   object-fit: cover;
 }
-
 .tile__remove {
   position: absolute;
   top: 9px;
@@ -81,22 +71,17 @@
     color var(--lx-dur) var(--lx-ease),
     border-color var(--lx-dur) var(--lx-ease);
 }
-
-/* Il bottone resta visibile anche da tastiera, non solo al passaggio del mouse. */
 .tile:hover .tile__remove,
 .tile__remove:focus-visible {
   opacity: 1;
 }
-
 .tile__remove:hover {
   color: var(--lx-danger);
   border-color: var(--lx-danger);
 }
-
 .tile__info {
   margin-top: 11px;
 }
-
 .tile__title {
   font-size: 0.9rem;
   font-weight: 600;
@@ -107,7 +92,6 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
 .tile__meta {
   display: flex;
   align-items: center;
@@ -116,7 +100,6 @@
   font-size: 0.75rem;
   color: var(--lx-text-dim);
 }
-
 .tile__badge {
   padding: 2px 8px;
   border: 1px solid var(--lx-border);
@@ -124,11 +107,6 @@
   font-size: 0.64rem;
   text-transform: uppercase;
 }
-
-/* --------------------------------------------------------------------------
-   Lista vuota
-   -------------------------------------------------------------------------- */
-
 .empty {
   display: flex;
   flex-direction: column;
@@ -142,17 +120,14 @@
   text-align: center;
   color: var(--lx-text-dim);
 }
-
 .empty__text {
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--lx-text);
 }
-
 .empty__hint {
   font-size: 0.9rem;
 }
-
 .empty__cta {
   margin-top: 16px;
   padding: 12px 28px;
@@ -164,7 +139,6 @@
     filter var(--lx-dur) var(--lx-ease),
     box-shadow var(--lx-dur) var(--lx-ease);
 }
-
 .empty__cta:hover {
   filter: brightness(1.12);
   box-shadow: 0 10px 32px rgba(124, 92, 255, 0.42);
@@ -175,8 +149,6 @@
     grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
     gap: 13px;
   }
-
-  /* Senza hover il bottone di rimozione dev'essere sempre visibile. */
   .tile__remove {
     opacity: 1;
   }

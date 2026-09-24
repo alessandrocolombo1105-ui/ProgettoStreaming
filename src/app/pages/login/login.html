@@ -7,7 +7,11 @@
 
     <h1 class="auth__title">{{ title() }}</h1>
     <p class="auth__lead">
-      {{ isSignUp() ? 'Bastano pochi secondi per iniziare.' : 'Accedi per ritrovare i tuoi titoli salvati.' }}
+      {{
+        isSignUp()
+          ? 'Bastano pochi secondi per iniziare.'
+          : 'Accedi per ritrovare i tuoi titoli salvati.'
+      }}
     </p>
 
     @if (errorMessage(); as message) {
@@ -17,7 +21,6 @@
       </p>
     }
 
-    <!-- Google: pulsante ufficiale se configurato, altrimenti simulazione -->
     @if (googleReady) {
       <div class="auth__google-slot" #googleSlot></div>
     } @else {
@@ -35,9 +38,8 @@
       <p class="auth__demo-note">
         <app-icon name="info" [size]="14" />
         <span>
-          Accesso <strong>simulato</strong>: nessun account Google reale è coinvolto.
-          Per abilitare il login Google vero, inserisci un Client ID in
-          <code>environment.ts</code>.
+          Accesso <strong>simulato</strong>: nessun account Google reale è coinvolto. Per abilitare
+          il login Google vero, inserisci un Client ID in <code>environment.ts</code>.
         </span>
       </p>
 
@@ -74,8 +76,12 @@
       @if (isSignUp()) {
         <label class="auth__field">
           <span class="auth__label">Nome</span>
-          <input type="text" formControlName="displayName" autocomplete="name"
-            placeholder="Mario Rossi" />
+          <input
+            type="text"
+            formControlName="displayName"
+            autocomplete="name"
+            placeholder="Mario Rossi"
+          />
         </label>
       }
 

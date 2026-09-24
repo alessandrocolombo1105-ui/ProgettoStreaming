@@ -48,7 +48,7 @@ describe('media.util', () => {
     expect(resolveMediaType(show)).toBe('tv');
   });
 
-  it('estrae l\'anno e restituisce null se la data manca', () => {
+  it("estrae l'anno e restituisce null se la data manca", () => {
     expect(getMediaYear(movie)).toBe(2010);
     expect(getMediaYear({ ...movie, release_date: '' })).toBeNull();
   });

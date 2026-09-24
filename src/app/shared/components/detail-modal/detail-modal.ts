@@ -28,28 +28,14 @@ import {
 import { Icon } from '../icon/icon';
 import { MovieCard } from '../movie-card/movie-card';
 
-/** Stato del caricamento dei dettagli. */
 type DetailState =
   | { status: 'idle' }
   | { status: 'loading' }
   | { status: 'ready'; details: MediaDetails }
   | { status: 'error'; message: string };
 
-/**
- * Le chiavi YouTube sono stringhe di 11 caratteri alfanumerici.
- * Validarle prima di costruire l'URL evita di passare al sanitizer un valore
- * arbitrario proveniente da una risposta di rete.
- */
 const YOUTUBE_KEY_PATTERN = /^[A-Za-z0-9_-]{6,20}$/;
 
-/**
- * Modale con scheda completa e player del trailer.
- *
- * È montata una sola volta in `App` e riceve il contenuto da
- * `DetailModalService`. Usa l'elemento nativo `<dialog>`: focus trap, chiusura
- * con Esc e inerzia del resto della pagina arrivano dal browser, senza doverle
- * reimplementare.
- */
 @Component({
   selector: 'app-detail-modal',
   imports: [Icon, MovieCard, RouterLink],
@@ -69,10 +55,8 @@ export class DetailModal {
   protected readonly target = this.modal.current;
   protected readonly isAuthenticated = this.auth.isAuthenticated;
 
-  /** Vero quando l'utente ha chiesto esplicitamente di vedere il trailer. */
   protected readonly isPlaying = signal(false);
 
-  /** Dettagli del titolo selezionato, ricaricati a ogni apertura. */
   private readonly state = toSignal(
     toObservable(this.target).pipe(
       switchMap((target) => {
@@ -102,7 +86,6 @@ export class DetailModal {
     return state.status === 'ready' ? state.details : null;
   });
 
-  /** Titolo e locandina della scheda cliccata, mostrati durante il caricamento. */
   protected readonly preview = computed(() => this.target()?.preview ?? null);
 
   protected readonly title = computed(() => {
@@ -138,7 +121,6 @@ export class DetailModal {
 
   protected readonly genres = computed(() => this.details()?.genres ?? []);
 
-  /** Primi interpreti del cast, quanti ne stanno su una riga. */
   protected readonly cast = computed(() => this.details()?.credits?.cast?.slice(0, 8) ?? []);
 
   protected readonly similar = computed<MediaItem[]>(
@@ -151,13 +133,6 @@ export class DetailModal {
 
   protected readonly hasTrailer = computed(() => this.trailer() !== null);
 
-  /**
-   * URL dell'iframe YouTube.
-   *
-   * Angular blocca gli URL dinamici in `[src]` di un iframe: il bypass è
-   * necessario, ma viene applicato solo a un indirizzo costruito qui a partire
-   * da una chiave già validata, mai a una stringa ricevuta così com'è.
-   */
   protected readonly trailerUrl = computed<SafeResourceUrl | null>(() => {
     const video = this.trailer();
     if (!video || !YOUTUBE_KEY_PATTERN.test(video.key)) {
@@ -179,7 +154,6 @@ export class DetailModal {
   });
 
   constructor() {
-    // Apertura e chiusura del <dialog> seguono lo stato del servizio.
     effect(() => {
       const element = this.dialog()?.nativeElement;
       const target = this.target();
@@ -195,7 +169,6 @@ export class DetailModal {
       }
     });
 
-    // Il player parte da solo se l'apertura arriva da un pulsante "Riproduci".
     effect(() => {
       const target = this.target();
       this.isPlaying.set(target?.autoplay ?? false);
@@ -210,7 +183,6 @@ export class DetailModal {
     this.modal.close();
   }
 
-  /** Invocato anche dalla chiusura nativa con Esc, oltre che dal bottone. */
   protected onDialogClose(): void {
     document.body.classList.remove('lx-modal-open');
     this.isPlaying.set(false);
@@ -219,10 +191,6 @@ export class DetailModal {
     }
   }
 
-  /**
-   * Il click arriva sull'elemento `<dialog>` solo quando cade sullo sfondo:
-   * sul contenuto lo intercetta il pannello interno.
-   */
   protected onBackdropClick(event: MouseEvent): void {
     if (event.target === this.dialog()?.nativeElement) {
       this.close();

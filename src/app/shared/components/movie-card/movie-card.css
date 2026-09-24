@@ -2,15 +2,12 @@
   position: relative;
   display: block;
   flex: 0 0 auto;
-  /* La larghezza arriva dal carosello, che la adatta al viewport. */
+
   width: var(--lx-card-w, 236px);
 }
-
-/* Sopra le schede vicine quando il pannello dettagli è aperto. */
 :host(.is-active) {
   z-index: 30;
 }
-
 .card__open {
   position: relative;
   display: block;
@@ -26,12 +23,9 @@
     box-shadow var(--lx-dur) var(--lx-ease),
     border-color var(--lx-dur) var(--lx-ease);
 }
-
 :host(.is-poster) .card__open {
   aspect-ratio: 2 / 3;
 }
-
-/* Sollevamento e alone violetto al posto del solo ingrandimento. */
 :host(.is-active) .card__open {
   transform: translateY(-6px) scale(1.04);
   border-color: rgba(124, 92, 255, 0.65);
@@ -42,15 +36,13 @@
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-
 .card__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Evita il lampo chiaro prima che la locandina sia decodificata. */
+
   background: var(--lx-surface-3);
 }
-
 .card__caption {
   position: absolute;
   inset: auto 0 0 0;
@@ -60,7 +52,7 @@
   text-align: left;
   line-height: 1.3;
   background: linear-gradient(to top, rgba(7, 10, 22, 0.94), transparent);
-  /* Titoli lunghi su due righe al massimo. */
+
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -68,18 +60,12 @@
   overflow: hidden;
   transition: opacity var(--lx-dur) var(--lx-ease);
 }
-
 :host(.is-active) .card__caption {
   opacity: 0;
 }
-
-/* --------------------------------------------------------------------------
-   Pannello dettagli
-   -------------------------------------------------------------------------- */
-
 .card__panel {
   position: absolute;
-  /* Agganciato al bordo inferiore dell'immagine sollevata e ingrandita. */
+
   top: calc(100% + (100% * 0.02) - 6px);
   left: 0;
   right: 0;
@@ -104,14 +90,12 @@
     opacity: 1;
   }
 }
-
 .card__actions {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 11px;
 }
-
 .card__action {
   display: inline-flex;
   align-items: center;
@@ -127,33 +111,26 @@
     border-color var(--lx-dur) var(--lx-ease),
     transform var(--lx-dur) var(--lx-ease);
 }
-
 .card__action:hover {
   border-color: var(--lx-cyan);
   background: var(--lx-glass-strong);
   transform: scale(1.1);
 }
-
 .card__action--play {
   background: var(--lx-accent-grad);
   border-color: transparent;
   color: #0b1020;
 }
-
 .card__action--play:hover {
   filter: brightness(1.12);
 }
-
 .card__action--saved {
   border-color: var(--lx-success);
   color: var(--lx-success);
 }
-
-/* Spinge il bottone "altre informazioni" a fondo riga. */
 .card__action--info {
   margin-left: auto;
 }
-
 .card__meta {
   display: flex;
   flex-wrap: wrap;
@@ -162,12 +139,10 @@
   font-size: 0.74rem;
   color: var(--lx-text-muted);
 }
-
 .card__match {
   color: var(--lx-cyan);
   font-weight: 700;
 }
-
 .card__badge {
   padding: 2px 7px;
   border: 1px solid var(--lx-border);
@@ -176,7 +151,6 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-
 .card__genres {
   display: flex;
   flex-wrap: wrap;
@@ -185,26 +159,21 @@
   font-size: 0.71rem;
   color: var(--lx-text-dim);
 }
-
-/* Separatore a pallino fra un genere e il successivo. */
 .card__genre + .card__genre::before {
   content: '•';
   margin-right: 6px;
 }
 
-/* Su touch l'hover non esiste: il pannello resterebbe bloccato dopo un tap. */
 @media (hover: none) {
   .card__panel {
     display: none;
   }
-
   :host(.is-active) .card__open {
     transform: none;
     box-shadow: none;
     border-radius: var(--lx-radius);
     border-color: var(--lx-border);
   }
-
   :host(.is-active) .card__caption {
     opacity: 1;
   }

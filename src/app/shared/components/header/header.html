@@ -14,8 +14,13 @@
 </button>
 
 <nav class="nav" [class.is-open]="isMenuOpen()" aria-label="Navigazione principale">
-  <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }"
-    (click)="closeAll()">Home</a>
+  <a
+    routerLink="/"
+    routerLinkActive="is-active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="closeAll()"
+    >Home</a
+  >
   <a routerLink="/film" routerLinkActive="is-active" (click)="closeAll()">Film</a>
   <a routerLink="/serie-tv" routerLinkActive="is-active" (click)="closeAll()">Serie TV</a>
   <a routerLink="/catalogo" routerLinkActive="is-active" (click)="closeAll()">Esplora</a>
@@ -54,8 +59,12 @@
           enterkeyhint="search"
         />
         @if (hasQuery()) {
-          <button type="button" class="search__clear" aria-label="Cancella la ricerca"
-            (click)="clearSearch()">
+          <button
+            type="button"
+            class="search__clear"
+            aria-label="Cancella la ricerca"
+            (click)="clearSearch()"
+          >
             <app-icon name="close" [size]="15" />
           </button>
         }
@@ -63,7 +72,6 @@
     }
   </div>
 
-  <!-- Profilo -->
   @if (isAuthenticated()) {
     <div class="profile">
       <button
@@ -75,8 +83,13 @@
       >
         <span class="profile__avatar">
           @if (user()?.avatarUrl; as photo) {
-            <img class="profile__photo" [src]="photo" alt="" aria-hidden="true"
-              referrerpolicy="no-referrer" />
+            <img
+              class="profile__photo"
+              [src]="photo"
+              alt=""
+              aria-hidden="true"
+              referrerpolicy="no-referrer"
+            />
           } @else {
             {{ initials() }}
           }
@@ -109,11 +122,6 @@
   }
 </div>
 
-<!--
-  Carosello dei risultati, agganciato alla navbar e non alla sola casella:
-  così occupa tutta la larghezza disponibile e le locandine restano leggibili.
-  `aria-live` annuncia l'esito, che altrimenti cambierebbe in silenzio.
--->
 @if (showResults()) {
   <section class="finder" role="region" aria-live="polite" aria-label="Risultati della ricerca">
     <header class="finder__head">
@@ -141,16 +149,19 @@
           <div class="finder__skeleton lx-skeleton"></div>
         }
       } @else if (!results().length) {
-        <p class="finder__hint">
-          Prova con meno lettere o controlla l'ortografia.
-        </p>
+        <p class="finder__hint">Prova con meno lettere o controlla l'ortografia.</p>
       } @else {
         @for (item of results(); track trackResult(item)) {
           <button type="button" class="hit" (click)="openResult(item)">
-            <img class="hit__poster" [src]="posterUrl(item)" alt="" aria-hidden="true"
-              loading="lazy" decoding="async" />
+            <img
+              class="hit__poster"
+              [src]="posterUrl(item)"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+            />
             <span class="hit__title">
-              <!-- Il titolo arriva già spezzato: niente markup costruito da stringhe di rete. -->
               @for (part of titleParts(item); track $index) {
                 <span [class.hit__match]="part.match">{{ part.text }}</span>
               }

@@ -5,10 +5,6 @@ import { asyncState } from '../../core/utils/async-state';
 import { HeroBanner } from '../../shared/components/hero-banner/hero-banner';
 import { MovieRow } from '../../shared/components/movie-row/movie-row';
 
-/**
- * Generi TMDB per le serie: gli id non coincidono con quelli dei film
- * (ad esempio "Azione & Avventura" esiste solo per le serie).
- */
 const GENRES = {
   azioneAvventura: 10759,
   commedia: 35,
@@ -18,7 +14,6 @@ const GENRES = {
   animazione: 16,
 } as const;
 
-/** Sezione dedicata alle serie TV. */
 @Component({
   selector: 'app-tv-shows',
   imports: [HeroBanner, MovieRow],
@@ -50,7 +45,6 @@ export class TvShows {
     [],
   );
 
-  /** Serie in evidenza: la prima in onda con backdrop e descrizione. */
   protected readonly featured = computed<MediaItem | null>(() => {
     const items = this.onTheAir().data;
     return items.find((item) => !!item.backdrop_path && !!item.overview) ?? items[0] ?? null;

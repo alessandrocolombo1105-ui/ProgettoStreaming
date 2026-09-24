@@ -7,8 +7,6 @@
   min-height: 100vh;
   padding: calc(var(--lx-header-h) + 24px) 20px 60px;
 }
-
-/* Card di vetro sospesa sull'aurora di fondo, senza sfondo proprio. */
 .auth__card {
   width: min(460px, 100%);
   padding: 34px 36px 28px;
@@ -19,7 +17,6 @@
   -webkit-backdrop-filter: blur(24px) saturate(150%);
   box-shadow: var(--lx-shadow-lg);
 }
-
 .auth__brand {
   display: flex;
   align-items: center;
@@ -29,7 +26,6 @@
   letter-spacing: 0.2em;
   color: var(--lx-text-muted);
 }
-
 .auth__mark {
   width: 12px;
   height: 12px;
@@ -38,20 +34,17 @@
   transform: rotate(45deg);
   box-shadow: 0 0 14px rgba(124, 92, 255, 0.8);
 }
-
 .auth__title {
   margin-top: 18px;
   font-size: 1.85rem;
   font-weight: 800;
   letter-spacing: -0.03em;
 }
-
 .auth__lead {
   margin-top: 7px;
   font-size: 0.92rem;
   color: var(--lx-text-muted);
 }
-
 .auth__error {
   display: flex;
   align-items: center;
@@ -64,20 +57,12 @@
   color: #ffd5da;
   font-size: 0.86rem;
 }
-
-/* --------------------------------------------------------------------------
-   Google
-   -------------------------------------------------------------------------- */
-
-/* Contenitore del pulsante reso dall'SDK di Google: centrato, altezza fissa
-   per non far saltare il layout mentre lo script si carica. */
 .auth__google-slot {
   display: flex;
   justify-content: center;
   min-height: 44px;
   margin-top: 22px;
 }
-
 .auth__demo-trigger {
   display: flex;
   align-items: center;
@@ -96,17 +81,13 @@
     background var(--lx-dur) var(--lx-ease),
     border-color var(--lx-dur) var(--lx-ease);
 }
-
 .auth__demo-trigger:hover:not(:disabled) {
   background: var(--lx-glass-strong);
   border-color: var(--lx-violet);
 }
-
 .auth__demo-trigger:disabled {
   opacity: 0.6;
 }
-
-/* Avviso che dichiara la natura simulata dell'accesso. */
 .auth__demo-note {
   display: flex;
   align-items: flex-start;
@@ -120,14 +101,12 @@
   font-size: 0.78rem;
   line-height: 1.5;
 }
-
 .auth__demo-note code {
   padding: 1px 5px;
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.35);
   font-size: 0.95em;
 }
-
 .picker {
   margin: 12px 0 0;
   padding: 6px;
@@ -148,7 +127,6 @@
     transform: none;
   }
 }
-
 .picker__item {
   display: flex;
   align-items: center;
@@ -164,12 +142,10 @@
     background var(--lx-dur) var(--lx-ease),
     color var(--lx-dur) var(--lx-ease);
 }
-
 .picker__item:hover:not(:disabled) {
   background: var(--lx-glass-strong);
   color: var(--lx-text);
 }
-
 .picker__avatar {
   display: grid;
   place-items: center;
@@ -181,7 +157,6 @@
   font-size: 0.82rem;
   font-weight: 800;
 }
-
 .picker__text {
   display: flex;
   flex-direction: column;
@@ -189,13 +164,11 @@
   min-width: 0;
   margin-right: auto;
 }
-
 .picker__name {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--lx-text);
 }
-
 .picker__email {
   font-size: 0.76rem;
   color: var(--lx-text-dim);
@@ -203,12 +176,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-/* --------------------------------------------------------------------------
-   Form email
-   -------------------------------------------------------------------------- */
-
-/* Separatore con la parola centrata fra due righe. */
 .auth__divider {
   display: flex;
   align-items: center;
@@ -219,7 +186,6 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-
 .auth__divider::before,
 .auth__divider::after {
   content: '';
@@ -227,19 +193,16 @@
   height: 1px;
   background: var(--lx-border);
 }
-
 .auth__form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
-
 .auth__field {
   display: flex;
   flex-direction: column;
   gap: 7px;
 }
-
 .auth__label {
   font-size: 0.72rem;
   font-weight: 600;
@@ -247,7 +210,6 @@
   text-transform: uppercase;
   color: var(--lx-text-dim);
 }
-
 .auth__field input {
   padding: 13px 15px;
   border-radius: var(--lx-radius);
@@ -260,21 +222,17 @@
     border-color var(--lx-dur) var(--lx-ease),
     box-shadow var(--lx-dur) var(--lx-ease);
 }
-
 .auth__field input:focus {
   border-color: var(--lx-violet);
   box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.16);
 }
-
 .auth__field input[aria-invalid='true'] {
   border-color: var(--lx-danger);
 }
-
 .auth__hint {
   font-size: 0.78rem;
   color: #ffb3bc;
 }
-
 .auth__submit {
   margin-top: 8px;
   padding: 14px;
@@ -288,24 +246,20 @@
     filter var(--lx-dur) var(--lx-ease),
     box-shadow var(--lx-dur) var(--lx-ease);
 }
-
 .auth__submit:hover:not(:disabled) {
   filter: brightness(1.12);
   box-shadow: 0 12px 34px rgba(124, 92, 255, 0.42);
 }
-
 .auth__submit:disabled {
   opacity: 0.65;
   cursor: progress;
 }
-
 .auth__switch {
   margin-top: 22px;
   font-size: 0.89rem;
   color: var(--lx-text-muted);
   text-align: center;
 }
-
 .auth__switch button {
   border: 0;
   background: none;
@@ -313,7 +267,6 @@
   color: var(--lx-cyan);
   font-weight: 600;
 }
-
 .auth__switch button:hover {
   text-decoration: underline;
 }

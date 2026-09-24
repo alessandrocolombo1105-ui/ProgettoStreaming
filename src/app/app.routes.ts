@@ -1,15 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard, guestGuard } from './core/guards/auth.guard';
 
-/**
- * Ogni pagina è caricata su richiesta con `loadComponent`: il bundle iniziale
- * resta limitato alla home, e catalogo, lista e login arrivano solo quando
- * l'utente li apre davvero.
- *
- * I parametri di query (`?query=`, `?returnUrl=`) raggiungono gli input dei
- * componenti grazie a `withComponentInputBinding()`, configurato in
- * `app.config.ts`.
- */
 export const routes: Routes = [
   {
     path: '',
@@ -43,6 +34,5 @@ export const routes: Routes = [
     canActivate: [guestGuard],
     loadComponent: () => import('./pages/login/login').then((m) => m.Login),
   },
-  // Qualsiasi indirizzo sconosciuto riporta alla home.
   { path: '**', redirectTo: '' },
 ];

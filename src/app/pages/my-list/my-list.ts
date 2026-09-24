@@ -8,12 +8,6 @@ import { TmdbService } from '../../core/services/tmdb.service';
 import { mediaKey } from '../../core/utils/media.util';
 import { Icon } from '../../shared/components/icon/icon';
 
-/**
- * Titoli salvati dall'utente.
- *
- * Le schede usano i dati conservati nella lista invece di rileggerli da TMDB:
- * una lista di trenta titoli produrrebbe altrettante richieste a ogni visita.
- */
 @Component({
   selector: 'app-my-list',
   imports: [Icon, RouterLink],

@@ -1,12 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
-/**
- * Forme elementari con cui è descritta ogni icona.
- *
- * Le icone non sono stringhe di markup passate a `innerHTML`: il sanitizer di
- * Angular rimuoverebbe gli elementi SVG. Descrivendole come dati e disegnandole
- * con elementi reali nel template, il risultato è sicuro e compilabile in AOT.
- */
 type Shape =
   | { kind: 'path'; d: string }
   | { kind: 'circle'; cx: number; cy: number; r: number }
@@ -16,7 +9,6 @@ const p = (d: string): Shape => ({ kind: 'path', d });
 const circle = (cx: number, cy: number, r: number): Shape => ({ kind: 'circle', cx, cy, r });
 const polygon = (points: string): Shape => ({ kind: 'polygon', points });
 
-/** Set minimo di icone (tratto Lucide, griglia 24x24, stroke 2). */
 const ICONS = {
   play: [polygon('6 3 20 12 6 21 6 3')],
   plus: [p('M5 12h14'), p('M12 5v14')],
@@ -27,7 +19,11 @@ const ICONS = {
   chevronRight: [p('m9 18 6-6-6-6')],
   chevronDown: [p('m6 9 6 6 6-6')],
   info: [circle(12, 12, 10), p('M12 16v-4'), p('M12 8h.01')],
-  star: [polygon('12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2')],
+  star: [
+    polygon(
+      '12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2',
+    ),
+  ],
   user: [p('M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'), circle(12, 7, 4)],
   logout: [p('M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'), p('m16 17 5-5-5-5'), p('M21 12H9')],
   filter: [polygon('22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3')],
@@ -88,7 +84,7 @@ export type IconName = keyof typeof ICONS;
 export class Icon {
   readonly name = input.required<IconName>();
   readonly size = input(20);
-  /** Riempie la forma con il colore corrente: usato per play e stella. */
+
   readonly filled = input(false);
   readonly strokeWidth = input(2);
 

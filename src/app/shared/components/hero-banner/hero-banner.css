@@ -2,15 +2,9 @@
   display: block;
   position: relative;
   z-index: 1;
-  /* Spazio per la navbar flottante, che non occupa flusso. */
+
   padding: calc(var(--lx-header-h) + 16px) var(--lx-gutter) 40px;
 }
-
-/*
-  Riquadro arrotondato anziché banda a tutta pagina: l'aurora di fondo resta
-  visibile intorno all'immagine ed è il tratto che allontana di più il layout
-  dai classici hero a sanguinamento pieno.
-*/
 .hero {
   position: relative;
   display: flex;
@@ -22,11 +16,9 @@
   overflow: hidden;
   box-shadow: var(--lx-shadow-lg);
 }
-
 .hero--loading {
   background: var(--lx-surface);
 }
-
 .hero__backdrop {
   position: absolute;
   inset: 0;
@@ -35,7 +27,6 @@
   object-fit: cover;
   object-position: center 20%;
 }
-
 .hero__scrim {
   position: absolute;
   inset: 0;
@@ -43,11 +34,6 @@
     linear-gradient(to top, rgba(7, 10, 22, 0.94) 4%, rgba(7, 10, 22, 0.28) 46%, transparent 78%),
     linear-gradient(105deg, rgba(7, 10, 22, 0.86) 0%, rgba(7, 10, 22, 0.24) 52%, transparent 80%);
 }
-
-/* --------------------------------------------------------------------------
-   Pannello di vetro
-   -------------------------------------------------------------------------- */
-
 .hero__panel {
   position: relative;
   max-width: 620px;
@@ -58,14 +44,12 @@
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
 }
-
 .hero__eyebrow {
   display: flex;
   align-items: center;
   gap: 11px;
   margin-bottom: 13px;
 }
-
 .hero__badge {
   padding: 4px 11px;
   border-radius: var(--lx-radius-pill);
@@ -76,7 +60,6 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-
 .hero__eyebrow-text {
   font-size: 0.76rem;
   font-weight: 500;
@@ -84,14 +67,12 @@
   text-transform: uppercase;
   color: var(--lx-text-muted);
 }
-
 .hero__title {
   font-size: clamp(2rem, 4.6vw, 3.5rem);
   font-weight: 800;
   line-height: 1.04;
   letter-spacing: -0.035em;
 }
-
 .hero__meta {
   display: flex;
   flex-wrap: wrap;
@@ -101,8 +82,6 @@
   font-size: 0.85rem;
   color: var(--lx-text-muted);
 }
-
-/* Punteggio con anello di avanzamento disegnato in conic-gradient. */
 .hero__score {
   display: inline-flex;
   align-items: center;
@@ -110,20 +89,15 @@
   font-weight: 700;
   color: var(--lx-text);
 }
-
 .hero__score-ring {
   width: 17px;
   height: 17px;
   border-radius: 50%;
-  background: conic-gradient(
-    var(--lx-cyan) calc(var(--score) * 1%),
-    rgba(255, 255, 255, 0.16) 0
-  );
-  /* Il foro centrale trasforma il disco in un anello. */
+  background: conic-gradient(var(--lx-cyan) calc(var(--score) * 1%), rgba(255, 255, 255, 0.16) 0);
+
   mask: radial-gradient(circle, transparent 54%, #000 56%);
   -webkit-mask: radial-gradient(circle, transparent 54%, #000 56%);
 }
-
 .hero__rating {
   display: inline-flex;
   align-items: center;
@@ -131,7 +105,6 @@
   color: var(--lx-warn);
   font-weight: 600;
 }
-
 .hero__chip {
   padding: 4px 11px;
   border-radius: var(--lx-radius-pill);
@@ -139,7 +112,6 @@
   background: var(--lx-glass);
   font-size: 0.78rem;
 }
-
 .hero__overview {
   margin-top: 16px;
   max-width: 34rem;
@@ -147,14 +119,12 @@
   line-height: 1.6;
   color: #ccd3e8;
 }
-
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 24px;
 }
-
 .hero__btn {
   display: inline-flex;
   align-items: center;
@@ -169,22 +139,18 @@
     box-shadow var(--lx-dur) var(--lx-ease),
     background var(--lx-dur) var(--lx-ease);
 }
-
 .hero__btn:hover {
   transform: translateY(-2px);
 }
-
 .hero__btn--play {
   background: var(--lx-accent-grad);
   color: #0b1020;
   font-weight: 700;
   box-shadow: 0 10px 34px rgba(124, 92, 255, 0.42);
 }
-
 .hero__btn--play:hover {
   box-shadow: 0 16px 44px rgba(124, 92, 255, 0.56);
 }
-
 .hero__btn--ghost {
   background: var(--lx-glass);
   border-color: var(--lx-border);
@@ -192,46 +158,34 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-
 .hero__btn--ghost:hover {
   background: var(--lx-glass-strong);
   border-color: var(--lx-border-strong);
 }
-
 .hero__btn--ghost.is-saved {
   border-color: var(--lx-success);
   color: var(--lx-success);
 }
-
-/* --------------------------------------------------------------------------
-   Scheletro di caricamento
-   -------------------------------------------------------------------------- */
-
 .hero__skeleton {
   height: 16px;
   margin-bottom: 13px;
   max-width: 520px;
 }
-
 .hero__skeleton--eyebrow {
   height: 20px;
   width: 190px;
 }
-
 .hero__skeleton--title {
   height: 52px;
   width: 65%;
   min-width: 240px;
 }
-
 .hero__skeleton--text {
   height: 13px;
 }
-
 .hero__skeleton--short {
   width: 68%;
 }
-
 .hero__skeleton--buttons {
   height: 44px;
   width: 330px;
@@ -243,26 +197,22 @@
   :host {
     padding-inline: 14px;
   }
-
   .hero {
     min-height: 62vh;
     padding: 16px;
   }
-
   .hero__panel {
     padding: 20px;
   }
-
   .hero__overview {
     font-size: 0.9rem;
-    /* Su schermi stretti la sinossi cede spazio ai pulsanti. */
+
     display: -webkit-box;
     -webkit-line-clamp: 3;
     line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-
   .hero__btn {
     padding: 10px 18px;
     font-size: 0.87rem;

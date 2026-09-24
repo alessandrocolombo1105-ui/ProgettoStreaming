@@ -32,25 +32,15 @@ import { resolveMediaType } from '../../core/utils/media.util';
 import { Icon } from '../../shared/components/icon/icon';
 import { MovieCard } from '../../shared/components/movie-card/movie-card';
 
-/** Pausa dopo l'ultima battitura prima di interrogare TMDB. */
 const SEARCH_DEBOUNCE_MS = 300;
-/** Primo anno selezionabile nel filtro: prima di allora il catalogo è scarno. */
+
 const FIRST_YEAR = 1950;
 
-/** Richiesta inviata al catalogo; `append` distingue una nuova pagina da una nuova ricerca. */
 interface CatalogRequest {
   filters: CatalogFilters;
   append: boolean;
 }
 
-/**
- * Catalogo con ricerca e filtri combinabili.
- *
- * La ricerca testuale passa per `debounceTime` e `distinctUntilChanged`, mentre
- * i menu a tendina aggiornano subito i risultati: aspettare dopo un clic su un
- * select sembrerebbe un ritardo dell'interfaccia. `switchMap` scarta la
- * risposta della richiesta precedente quando ne parte una nuova.
- */
 @Component({
   selector: 'app-catalog',
   imports: [ReactiveFormsModule, Icon, MovieCard],
@@ -62,7 +52,6 @@ export class Catalog {
   private readonly tmdb = inject(TmdbService);
   private readonly genreStore = inject(GenreStore);
 
-  /** Termine iniziale, passato dall'header come query param `?query=`. */
   readonly query = input('');
 
   readonly form = new FormGroup({
@@ -90,7 +79,6 @@ export class Catalog {
     (_, index) => new Date().getFullYear() - index,
   );
 
-  /** Tipo selezionato, letto come Signal per aggiornare l'elenco dei generi. */
   private readonly mediaType = toSignal(
     this.form.controls.mediaType.valueChanges.pipe(startWith(this.form.controls.mediaType.value)),
     { initialValue: DEFAULT_FILTERS.mediaType },
@@ -101,7 +89,6 @@ export class Catalog {
   protected readonly hasResults = computed(() => this.results().length > 0);
   protected readonly canLoadMore = computed(() => this.page() < this.totalPages());
 
-  /** Etichetta del conteggio, con il plurale corretto. */
   protected readonly resultsLabel = computed(() => {
     const total = this.totalResults();
     if (!total) {
@@ -110,7 +97,6 @@ export class Catalog {
     return total === 1 ? '1 titolo trovato' : `${total.toLocaleString('it-IT')} titoli trovati`;
   });
 
-  /** Vero quando almeno un filtro si discosta dai valori predefiniti. */
   protected readonly hasActiveFilters = computed(() => {
     const value = this.formValue();
     return (
@@ -122,7 +108,6 @@ export class Catalog {
     );
   });
 
-  /** Copia reattiva dei valori del form, per i computed che li osservano. */
   private readonly formValue = toSignal(
     this.form.valueChanges.pipe(
       map(() => this.currentFilters()),
@@ -134,8 +119,6 @@ export class Catalog {
   protected readonly skeletons = Array.from({ length: 18 }, (_, index) => index);
 
   constructor() {
-    // Il termine arriva dalla URL: applicarlo qui tiene allineato il form con
-    // la ricerca lanciata dall'header.
     effect(() => {
       const initial = this.query();
       if (initial && initial !== this.form.controls.query.value) {
@@ -149,7 +132,6 @@ export class Catalog {
       distinctUntilChanged(),
     );
 
-    // I filtri a tendina non hanno bisogno di attesa: reagiscono al cambio.
     const controls = this.form.controls;
     const others$ = merge(
       controls.mediaType.valueChanges,
@@ -159,8 +141,6 @@ export class Catalog {
       controls.sortBy.valueChanges,
     );
 
-    // Cambiando tipo di contenuto il genere scelto non esiste più: gli id dei
-    // generi film e serie appartengono a insiemi diversi.
     controls.mediaType.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
       controls.genreId.setValue(null, { emitEvent: false });
     });
@@ -175,7 +155,9 @@ export class Catalog {
           const isAppend = request.append;
           (isAppend ? this.loadingMore : this.loading).set(true);
           this.error.set(null);
-          return this.tmdb.getCatalog(request.filters).pipe(map((response) => ({ response, isAppend })));
+          return this.tmdb
+            .getCatalog(request.filters)
+            .pipe(map((response) => ({ response, isAppend })));
         }),
         takeUntilDestroyed(),
       )
@@ -185,7 +167,7 @@ export class Catalog {
             isAppend ? [...current, ...response.results] : response.results,
           );
           this.totalResults.set(response.total_results);
-          // TMDB non serve oltre la pagina 500, anche quando ne dichiara di più.
+
           this.totalPages.set(Math.min(response.total_pages, 500));
           this.loading.set(false);
           this.loadingMore.set(false);
@@ -200,13 +182,11 @@ export class Catalog {
     this.search();
   }
 
-  /** Riparte dalla prima pagina con i filtri correnti. */
   protected search(): void {
     this.page.set(1);
     this.requests.next({ filters: this.currentFilters(), append: false });
   }
 
-  /** Aggiunge in coda la pagina successiva, conservando i risultati già mostrati. */
   protected loadMore(): void {
     if (!this.canLoadMore() || this.loadingMore()) {
       return;
@@ -216,13 +196,6 @@ export class Catalog {
     this.requests.next({ filters: { ...this.currentFilters(), page: next }, append: true });
   }
 
-  /**
-   * Azzera i filtri mantenendo il tipo di contenuto scelto.
-   *
-   * `emitEvent: false` evita che i sei controlli emettano in sequenza,
-   * facendo partire altrettante ricerche: la richiesta viene lanciata una
-   * volta sola alla fine.
-   */
   protected resetFilters(): void {
     this.form.reset(
       {
@@ -235,7 +208,7 @@ export class Catalog {
       },
       { emitEvent: false },
     );
-    // Una sola emissione sul gruppo, per aggiornare i valori osservati dalla UI.
+
     this.form.updateValueAndValidity();
     this.search();
   }
@@ -244,14 +217,11 @@ export class Catalog {
     return `${resolveMediaType(item)}:${item.id}`;
   }
 
-  /** Valori del form normalizzati nella forma attesa dal servizio. */
   private currentFilters(): CatalogFilters {
     const value = this.form.getRawValue();
     return {
       query: value.query.trim(),
       mediaType: value.mediaType,
-      // I <select> restituiscono stringhe: senza conversione il confronto
-      // numerico lato servizio fallirebbe silenziosamente.
       genreId: value.genreId === null ? null : Number(value.genreId),
       year: value.year === null ? null : Number(value.year),
       minRating: Number(value.minRating),
